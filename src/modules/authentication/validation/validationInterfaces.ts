@@ -4,3 +4,8 @@ export type IRegisterSchemaProps = {
   password: string;
   passwordConfirm: string;
 };
+
+export type ILoginSchemaProps = {
+  email: string;
+  password: string;
+};

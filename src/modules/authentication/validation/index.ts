@@ -8,7 +8,7 @@ export const registerSchema = yup.object({
     .required("Email is required"),
   password: yup
     .string()
-    .required('Password is required')
+    .required("Password is required")
     .min(8, "Password must be at least 8 characters long")
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\-]).{8,}$/,
@@ -18,4 +18,13 @@ export const registerSchema = yup.object({
     .string()
     .oneOf([yup.ref("password")], "Passwords do not match")
     .required("Required"),
+});
+
+export const loginSchema = yup.object({
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("Email is required"),
+
+  password: yup.string().required("Password is required"),
 });

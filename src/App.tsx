@@ -1,10 +1,9 @@
-import Register from "@modules/authentication/Register";
-
+import Login from "@modules/authentication/Login";
 
 function App() {
   return (
     <>
-      <Register />
+      <Login />
     </>
   );
 }

@@ -24,7 +24,11 @@ const Register = () => {
   return (
     <AuthLayout
       label="Register to create an account"
-      text="Already registered? Please Login "
+      text={
+        <p>
+          Already registered? <span>Please Login</span>
+        </p>
+      }
     >
       <form
         onSubmit={handleSubmit(handleSubmitForm, (err) => console.log(err))}

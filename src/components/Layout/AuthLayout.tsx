@@ -3,7 +3,7 @@ import { FC, ReactNode } from "react";
 type Props = {
   children: ReactNode;
   label: string;
-  text: string;
+  text: ReactNode;
 };
 const AuthLayout: FC<Props> = ({ children, label, text }) => {
   return (
