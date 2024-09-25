@@ -3,20 +3,23 @@ import { useForm } from "react-hook-form";
 import Button from "shared/Button";
 import ControlledInput from "shared/Input/ControlledInput";
 import ControlledInputPassword from "shared/InputPassword/ControlledInputPassword";
+import { registerSchema } from "../validation";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { IRegisterSchemaProps } from "../validation/validationInterfaces";
 
 const Register = () => {
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit } = useForm<IRegisterSchemaProps>({
     defaultValues: {
       name: "",
       email: "",
       password: "",
-      passwordConfrim: "",
+      passwordConfirm: "",
     },
+    resolver: yupResolver(registerSchema),
   });
 
-  const handleSubmitForm = (data) => {
+  const handleSubmitForm = (data: IRegisterSchemaProps) => {
     console.log(data);
-    console.log('hi')
   };
   return (
     <AuthLayout
@@ -43,11 +46,11 @@ const Register = () => {
         />
         <ControlledInputPassword
           label="Confirm your password"
-          name="passwordConfrim"
+          name="passwordConfirm"
           control={control}
         />
 
-        <Button  type='submit' className="bg-blue-800 text-[#fff] w-full mt-4">
+        <Button type="submit" className="bg-blue-800 text-[#fff] w-full mt-4">
           Register
         </Button>
       </form>
