@@ -1,9 +1,12 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { SiTask } from "react-icons/si";
 
 import { RiTeamFill } from "react-icons/ri";
 import { twMerge } from "tailwind-merge";
-import { UsersPath } from "@constants/path";
+import { AuthPagePath, UsersPath } from "@constants/path";
+import { IoPerson } from "react-icons/io5";
+import { BiLogOut } from "react-icons/bi";
+import { logOut } from "helpers/auth";
 
 const USER_SIDENAV = [
   {
@@ -12,16 +15,22 @@ const USER_SIDENAV = [
     icon: <RiTeamFill />,
     iconWhite: <RiTeamFill className="text-white" />,
   },
-  
 ];
 
-
 const SideNav = () => {
-const location = useLocation();
-const pathName = location.pathname.split("/")[2];
+  const location = useLocation();
+  const navigate = useNavigate();
+  const pathName = location.pathname.split("/")[2];
+
+  const handleLogout = () => {
+    logOut();
+    navigate(AuthPagePath.signin(), { replace: true });
+  };
+
+  
 
   return (
-    <div className="overflow-auto bg-[#002248] flex flex-col border-r-2 border-[#F7F7F8] text-[#334155] font-[Inter] h-screen">
+    <div className="overflow-auto bg-[#F7F7F8] flex flex-col border-r-2 border-[#F7F7F8] text-[#000] font-[Inter] h-screen">
       <div className="h-[5rem] px-[28px] py-[8px]">
         <SiTask className="h-[50px] w-[143px] text-blue-700" />
       </div>
@@ -29,7 +38,7 @@ const pathName = location.pathname.split("/")[2];
         {USER_SIDENAV.map((sidenav) => (
           <NavLink
             className={twMerge(
-              "grid grid-flow-col items-center justify-start gap-3 px-[14px] text-[14px] font-[400] text-white h-[40px]",
+              "grid grid-flow-col items-center justify-start gap-3 px-[14px] text-[14px] font-[400] text-[#000] h-[40px]",
               "transition-[all_.3s] rounded-[10px]",
               "[&.active]:bg-white",
               "[&.active]:text-[#002248]"
@@ -44,18 +53,10 @@ const pathName = location.pathname.split("/")[2];
             // }}
           >
             {pathName === sidenav.path ? (
-              //   <sidenav.IconYellow
-              //   // style={{
-              //   //   marginLeft: "8px",
-              //   // }}
-              //   />
+              
               <div>{sidenav.iconWhite} </div>
             ) : (
-              //   <sidenav.Icon
-              //   // style={{
-              //   //   marginLeft: "8px",
-              //   // }}
-              //   />
+              
               <div>{sidenav.icon} </div>
             )}
             <span>{sidenav.name}</span>
@@ -93,46 +94,28 @@ const pathName = location.pathname.split("/")[2];
         </NavLink> */}
       </div>
 
-      {/* <footer className="flex flex-col px-4 py-4 sticky top-auto bottom-0 border-t bg-inherit">
-        <div className="px-[14px]">
-          <div className="flex items-center justify-between text-white ">
-            <p className="  text-[14px] font-[600]">{user?.fullname}</p>
-            <Menu
-              align="end"
-              position="anchor"
-              direction="top"
-              menuButton={
-                <MenuButton>
-                  <span className="icon-dots-horizontal" />
-                </MenuButton>
-              }
-              transition={true}
-            >
-              {menuOptions?.map((menuItem, i) => {
-                return (
-                  <MenuItem
-                    className="w-[14rem] flex gap-2 items-center"
-                    key={i}
-                    onClick={() => menuItem?.action()}
-                  >
-                    <span>
-                      <menuItem.icon />
-                    </span>
-                    <span
-                      className={`${menuItem.classname} text-[12px] font-[500]`}
-                    >
-                      {menuItem?.menuTitle}
-                    </span>
-                  </MenuItem>
-                );
-              })}
-            </Menu>
+      <footer className="flex flex-col px-4 py-4 sticky top-auto bottom-0 border-t  bg-[#002248] text-white">
+        <div className="px-[14px] ">
+          <div className="flex gap-2">
+            <IoPerson />{" "}
+            <div>
+              <p className="  text-[14px] font-[600]">Nife</p>
+
+              <p className=" text-[#FFFFFFB2] text-[14px] font-[400] whitespace-nowrap">
+                {/* {user?.email} */}yyy@gmail.com
+              </p>
+            </div>
           </div>
-          <p className=" text-[#FFFFFFB2] text-[14px] font-[400] whitespace-nowrap">
-            {user?.email}
-          </p>
+
+          <div
+            className="flex gap-2 cursor-pointer pt-4"
+            onClick={handleLogout}
+          >
+            <BiLogOut size={20} className="" />
+            <p>LogOut</p>
+          </div>
         </div>
-      </footer> */}
+      </footer>
     </div>
   );
 };
