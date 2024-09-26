@@ -6,20 +6,28 @@ import ControlledInput from "shared/Input/ControlledInput";
 import ControlledInputPassword from "shared/InputPassword/ControlledInputPassword";
 import { ILoginSchemaProps } from "../validation/validationInterfaces";
 import { loginSchema } from "../validation";
-
+import { useLoginMutation } from "@services/auth.service";
+import CircularProgress from "shared/CircularProgress";
 
 const Login = () => {
-     const { control, handleSubmit } = useForm<ILoginSchemaProps>({
-       defaultValues: {
-         email: "",
-         password: "",
-       },
-       resolver: yupResolver(loginSchema),
-     });
+  const { control, handleSubmit } = useForm<ILoginSchemaProps>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    resolver: yupResolver(loginSchema),
+  });
 
-      const handleSubmitForm = (data: ILoginSchemaProps) => {
-        console.log(data);
-      };
+  const [login, { isLoading }] = useLoginMutation();
+  const handleSubmitForm = async (data: ILoginSchemaProps) => {
+    console.log(data);
+    try {
+      const res = await login(data).unwrap();
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <AuthLayout
@@ -41,11 +49,11 @@ const Login = () => {
         />
 
         <Button type="submit" className="bg-blue-800 text-[#fff] w-full mt-4">
-          Login
+          {isLoading ? <CircularProgress color="#fff" /> : " Login"}
         </Button>
       </form>
     </AuthLayout>
   );
-}
+};
 
-export default Login
+export default Login;

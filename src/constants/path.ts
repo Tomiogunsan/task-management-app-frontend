@@ -1,7 +1,15 @@
 export const AuthPaths = {
   SIGNIN: "signin",
-REGISTER: "register",
+  REGISTER: "register",
 };
+
+export const BasePaths = {
+  USER: "/user",
+};
+
+export const UsersPath = {
+  TEAM: "team",
+}
 
 export const AuthPagePath = {
   signin: (appendRedirectUrl: boolean = false) =>

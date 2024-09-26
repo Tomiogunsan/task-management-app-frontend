@@ -5,10 +5,16 @@ import ControlledInput from "shared/Input/ControlledInput";
 import ControlledInputPassword from "shared/InputPassword/ControlledInputPassword";
 import { registerSchema } from "../validation";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { IRegisterSchemaProps } from "../validation/validationInterfaces";
+
+import { IRegisterDTO } from "@services/interfaces/DTO/auth";
+import { useRegisterMutation } from "@services/auth.service";
+
+import { IRegisterResponse } from "@services/interfaces/response/auth";
+import { toastAlert } from "@utils/toastConfig";
+import CircularProgress from "shared/CircularProgress";
 
 const Register = () => {
-  const { control, handleSubmit } = useForm<IRegisterSchemaProps>({
+  const { control, handleSubmit } = useForm<IRegisterDTO>({
     defaultValues: {
       name: "",
       email: "",
@@ -18,8 +24,19 @@ const Register = () => {
     resolver: yupResolver(registerSchema),
   });
 
-  const handleSubmitForm = (data: IRegisterSchemaProps) => {
+  const [register, { isLoading }] = useRegisterMutation();
+  const handleSubmitForm = async (data: IRegisterDTO) => {
     console.log(data);
+    try {
+      const res = (await register(
+        data
+      ).unwrap()) as unknown as IRegisterResponse;
+      console.log(res);
+      toastAlert.success("Registered successfully");
+    } catch (error) {
+      console.log(error);
+      toastAlert.error("Something went wrong");
+    }
   };
   return (
     <AuthLayout
@@ -55,7 +72,7 @@ const Register = () => {
         />
 
         <Button type="submit" className="bg-blue-800 text-[#fff] w-full mt-4">
-          Register
+          {isLoading ? <CircularProgress color="#fff" /> : "Register"}
         </Button>
       </form>
     </AuthLayout>
