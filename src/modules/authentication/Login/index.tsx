@@ -7,9 +7,20 @@ import ControlledInputPassword from "shared/InputPassword/ControlledInputPasswor
 import { ILoginSchemaProps } from "../validation/validationInterfaces";
 import { loginSchema } from "../validation";
 import { useLoginMutation } from "@services/auth.service";
+
+import { AuthPaths, BasePaths } from "@constants/path";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  ILoginErrorResponse,
+  ILoginResponse,
+} from "@services/interfaces/response/auth";
+import { toastAlert } from "@utils/toastConfig";
+
+import { setToken } from "helpers/auth";
 import CircularProgress from "shared/CircularProgress";
 
 const Login = () => {
+  const navigate = useNavigate();
   const { control, handleSubmit } = useForm<ILoginSchemaProps>({
     defaultValues: {
       email: "",
@@ -22,10 +33,15 @@ const Login = () => {
   const handleSubmitForm = async (data: ILoginSchemaProps) => {
     console.log(data);
     try {
-      const res = await login(data).unwrap();
+      const res = (await login(data).unwrap()) as unknown as ILoginResponse;
       console.log(res);
+      toastAlert.success("Logged in successfully");
+      setToken(res.token);
+      navigate(BasePaths.USER);
     } catch (error) {
       console.log(error);
+      const { message } = error as unknown as ILoginErrorResponse;
+      toastAlert.error(message || "Incorrect email or password");
     }
   };
 
@@ -49,8 +65,20 @@ const Login = () => {
         />
 
         <Button type="submit" className="bg-blue-800 text-[#fff] w-full mt-4">
-          {isLoading ? <CircularProgress color="#fff" /> : " Login"}
+          {isLoading ? (
+            <div>
+              <CircularProgress />{" "}
+            </div>
+          ) : (
+            " Login"
+          )}
         </Button>
+        <p className="pt-4 text-center text-gray-400">
+          Not registered yet?{" "}
+          <span className="text-blue-700 font-bold">
+            <Link to={`/${AuthPaths.REGISTER}`}>Register here</Link>
+          </span>
+        </p>
       </form>
     </AuthLayout>
   );

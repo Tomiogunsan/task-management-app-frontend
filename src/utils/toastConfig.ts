@@ -2,6 +2,7 @@ import { merge } from "lodash";
 import toast from "react-hot-toast";
 import CircularProgress from "shared/CircularProgress";
 
+
 const defaultConfig: Parameters<typeof toast>[1] = {
   position: "top-center",
   style: {

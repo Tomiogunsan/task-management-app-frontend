@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 
-import { AuthPagePath } from "../constants/path";
+// import { AuthPagePath } from "../constants/path";
 import Api from "./http-common";
 // import handleApiError from 'helpers/handleApiError';
 
@@ -44,13 +44,13 @@ export const httpRequest =
       });
     } catch (error) {
       const err = error as unknown as IAxoisResponse;
-      if (
-        err?.response?.status === 401 &&
-        !(params?.headers && params.headers["X-no-auth-redirect"] === "true")
-      ) {
-        // redirect to login page
-        window.location.href = AuthPagePath.signin(true);
-      }
+      // if (
+      //   err?.response?.status === 401 &&
+      //   !(params?.headers && params.headers["X-no-auth-redirect"] === "true")
+      // ) {
+      //   // redirect to login page
+      //   window.location.href = AuthPagePath.signin(true);
+      // }
       return {
         error: {
           status: err.response?.status,

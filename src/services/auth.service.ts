@@ -1,7 +1,7 @@
 import { configuredApi } from "@constants/createApi-common";
 import { LOGIN, REGISTER } from "config/apiUrl";
 import { ILoginDTO, IRegisterDTO } from "./interfaces/DTO/auth";
-import { IRegisterResponse } from "./interfaces/response/auth";
+import { ILoginResponse, IRegisterResponse } from "./interfaces/response/auth";
 
 export const authApi = configuredApi
   .enhanceEndpoints({
@@ -18,7 +18,7 @@ export const authApi = configuredApi
           data,
         }),
       }),
-      login: build.mutation<unknown, ILoginDTO>({
+      login: build.mutation<ILoginResponse, ILoginDTO>({
         query: (data) => ({
           method: "POST",
           url: LOGIN,

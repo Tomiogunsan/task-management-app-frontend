@@ -18,3 +18,14 @@ export type IRegisterResponse = {
     };
   };
 };
+
+export type ILoginErrorResponse = {
+  status: string;
+  message: string;
+};
+
+export type ILoginResponse = {
+  status: string;
+  message: string;
+  token: string;
+};

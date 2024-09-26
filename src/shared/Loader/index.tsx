@@ -1,11 +1,11 @@
-import LoaderIcon from './LoaderIcon';
+import { CircularProgress } from "@mui/material";
 
-function Loader() {
+const Loader = () => {
   return (
-    <div className="flex justify-center items-center w-full h-screen">
-      <LoaderIcon width={200} height={200} />
+    <div className="w-full flex items-center justify-center mt-[350px]">
+      <CircularProgress />
     </div>
   );
-}
+};
 
 export default Loader;

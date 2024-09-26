@@ -11,9 +11,13 @@ import { useRegisterMutation } from "@services/auth.service";
 
 import { IRegisterResponse } from "@services/interfaces/response/auth";
 import { toastAlert } from "@utils/toastConfig";
+
+import { Link, useNavigate } from "react-router-dom";
+import { AuthPaths } from "@constants/path";
 import CircularProgress from "shared/CircularProgress";
 
 const Register = () => {
+  const navigate = useNavigate();
   const { control, handleSubmit } = useForm<IRegisterDTO>({
     defaultValues: {
       name: "",
@@ -33,6 +37,7 @@ const Register = () => {
       ).unwrap()) as unknown as IRegisterResponse;
       console.log(res);
       toastAlert.success("Registered successfully");
+      navigate(`/${AuthPaths.SIGNIN}`);
     } catch (error) {
       console.log(error);
       toastAlert.error("Something went wrong");
@@ -43,7 +48,10 @@ const Register = () => {
       label="Register to create an account"
       text={
         <p>
-          Already registered? <span>Please Login</span>
+          Already registered?{" "}
+          <span className='text-blue-700 font-bold'>
+            <Link to={`/${AuthPaths.SIGNIN}`}>Please Login</Link>
+          </span>
         </p>
       }
     >
@@ -72,7 +80,7 @@ const Register = () => {
         />
 
         <Button type="submit" className="bg-blue-800 text-[#fff] w-full mt-4">
-          {isLoading ? <CircularProgress color="#fff" /> : "Register"}
+          {isLoading ? <CircularProgress /> : "Register"}
         </Button>
       </form>
     </AuthLayout>
