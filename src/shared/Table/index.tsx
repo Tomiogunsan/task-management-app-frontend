@@ -92,7 +92,7 @@ const Table = <TData extends ITableBody>({
             )}
           </thead>
           <tbody>
-            {body?.map((data, idx) => {
+            {body.map((data, idx) => {
               return (
                 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
                 <tr key={idx} className="border-b-[1px] border-[#ccc] cursor-pointer" onClick={() => {onRowClick && onRowClick(data)}}>
