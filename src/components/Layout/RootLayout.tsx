@@ -11,7 +11,7 @@ const RootLayout = ({children}: Props) => {
       <aside className="h-screen sticky  top-0">
         <SideNav />
       </aside>
-      <main className="bg-white h-screen grid auto-rows-max-auto overflow-auto">
+      <main className="bg-white h-screen grid auto-rows-max-auto overflow-auto pl-8">
         {children}
       </main>
     </section>

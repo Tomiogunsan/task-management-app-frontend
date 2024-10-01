@@ -41,7 +41,7 @@ const Table = <TData extends ITableBody>({
 }: ITableProps<TData>) => {
   return (
     <>
-      {body.length === 0 ? (
+      {body?.length === 0 ? (
         <>
           <div className="flex justify-between items-center bg-[#F8F8F8] font-medium">
             {heads.map(({ label, accessor }) => {
@@ -67,7 +67,7 @@ const Table = <TData extends ITableBody>({
       ) : (
         <table className="w-full bg-[#fff]">
           <thead>
-            {heads.map(
+            {heads?.map(
               (head,i) => {
                 const {label,align, columnClassName, headClassName} = head
                 return (
@@ -92,8 +92,9 @@ const Table = <TData extends ITableBody>({
             )}
           </thead>
           <tbody>
-            {body.map((data, idx) => {
+            {body?.map((data, idx) => {
               return (
+                // eslint-disable-next-line @typescript-eslint/no-unused-expressions
                 <tr key={idx} className="border-b-[1px] border-[#ccc] cursor-pointer" onClick={() => {onRowClick && onRowClick(data)}}>
                   {heads.map((head, idx) => {
                     const { align, accessor, render,  columnClassName} = head
