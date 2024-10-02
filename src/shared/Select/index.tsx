@@ -1,8 +1,3 @@
-import { useEffect, useMemo, useState } from "react";
-import { ISelectOption, ISelectProps } from "./interface";
-import { isEqual } from "lodash";
-
-import { escapeRegExpChar } from "helpers/regex";
 import { twMerge } from "tailwind-merge";
 import {
   InputAdornment,
@@ -10,22 +5,21 @@ import {
   MenuItem,
   SelectChangeEvent,
   Chip,
-  Checkbox,
 } from "@mui/material";
-import ChevronDown from "@assets/svg/chevron-down.svg";
-import XClose from "@assets/svg/x-close.svg";
-import Search from "@assets/svg/search.svg";
- import Asteric from '@assets/icons/Label.svg';
-import Input from "../Input";
-import FieldHelperText from "../FieldHelperText";
+import { ISelectOption, ISelectProps } from "./interface";
+
+import React, { useEffect, useMemo, useState } from "react";
+import { isEqual } from "lodash";
+
+import { escapeRegExpChar } from "helpers/regex";
 
 const selectAllOptionValue = "component~select~all~option";
 const Select = (props: ISelectProps) => {
   const {
-    label,
-    title,
+    containerClassName,
+
     className,
-    helperText,
+
     startAdornment,
     endAdornment,
     options,
@@ -38,14 +32,16 @@ const Select = (props: ISelectProps) => {
     displayEmpty,
     placeholder,
     IconComponent,
+    StartIconComponent,
     classes,
     searchable,
     renderedValueClassName,
-    asteric,
-    singleSelection,
-    // onSearch,
-    // EoL: EoLProps,
+    onSearch,
+
     onClose,
+
+    MenuProps,
+
     ...rest
   } = props;
 
@@ -73,24 +69,27 @@ const Select = (props: ISelectProps) => {
   }, [options]);
 
   useEffect(() => {
-    if (value && !isEqual(value, selectedValues)) {
+    if (
+      ![undefined, null].includes(value as null) &&
+      !isEqual(value, selectedValues)
+    ) {
       setSelectedValues(value);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
-  // useEffect(() => {
-  //   if (onSearch) {
-  //     onSearch(searchQuery);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [searchQuery]);
+  useEffect(() => {
+    if (onSearch) {
+      onSearch(searchQuery);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
 
   const onSelectedChange = (event: SelectChangeEvent<unknown>) => {
     if (multiple) {
-      let newSelectedValues = (event.target.value as string[]).filter(
-        (value) => value
-      ); //Filter invalid values
+      let newSelectedValues = (
+        event.target.value as ISelectOption["value"][]
+      ).filter((value) => value); //Filter invalid values
 
       if (newSelectedValues.includes(selectAllOptionValue)) {
         if ((selectedValues as string[]).length === options.length) {
@@ -127,81 +126,89 @@ const Select = (props: ISelectProps) => {
     return optionsLabelByValue[_selected];
   };
 
+  const renderSelectedValue = (
+    selected: unknown,
+    StartIcon?: React.ElementType,
+    EndIcon?: React.ElementType
+  ) => {
+    const placeholderValue = placeholder || "";
+
+    const Value = (renderValue ? renderValue : defaultRenderValue)(
+      selected,
+      multiple ? optionsByValue : optionsByValue[selected as string]
+    );
+
+    const renderReturnValue = (returnValue: React.ReactNode) => {
+      return (
+        <div
+          className={twMerge(
+            "grid grid-flow-col justify-between items-center w-full gap-[8px]",
+            renderedValueClassName
+          )}
+        >
+          {StartIcon && <StartIcon />}
+          {returnValue}
+          {EndIcon && (
+            <div className={twMerge("flex h-max", open ? "rotate-180" : "")}>
+              {<EndIcon />}
+            </div>
+          )}
+        </div>
+      );
+    };
+    if (!Value || (Array.isArray(values) && values.length === 0)) {
+      return renderReturnValue(placeholderValue);
+    }
+
+    return renderReturnValue(Value);
+  };
+
   const menuItemPadding = "!px-[24px] !py-[9px]";
-  const menuItemClassName = `${menuItemPadding} !text-[12px] !justify-between !items-center !gap-[8px] !w-full !cursor-pointer`;
+  const menuItemClassName = `${menuItemPadding} !text-xs !justify-between !items-center !gap-[8px] !w-full !cursor-pointer`;
   const values = multiple
-    ? ((value || selectedValues) as string[])
-    : ((value || selectedValues) as string);
+    ? ((value || selectedValues) as ISelectOption["value"][])
+    : ((value || selectedValues) as ISelectOption["value"]);
 
   const reg = new RegExp(escapeRegExpChar(searchQuery), "i");
-  const searchResultValues: string[] = options
+  const searchResultValues: ISelectOption["value"][] = options
     .filter((option) => !searchQuery || option.label.match(reg))
     .map((option) => option.value);
 
-  // const EoLRef = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleClose = (e: any) => {
+    setOpen(false);
+    setSearchQuery("");
+    onClose?.(e);
+  };
 
   return (
-    <div className="w-full max-w-full h-max overflow-hidden">
-      {label && asteric ? (
-        <div className="flex items-center">
-          <label className="text-[13px] leading-5 text-[#333]">{label}</label>
-          <img src={Asteric} alt="asteric" className="ml-[4px]" />
-        </div>
-      ) : (
-        <label className="pb-[3px] text-[#333333]">{label}</label>
+    <div
+      className={twMerge(
+        "w-full max-w-full h-max overflow-hidden",
+        containerClassName
       )}
-      {/* {labelHelperText && (
-        <FieldLabelHelperText {...(labelHelperTextProps || {})}>
-          {labelHelperText}
-        </FieldLabelHelperText>
-      )} */}
-
+    >
       <MUISelect
         {...rest}
         displayEmpty={displayEmpty}
         value={values}
         multiple={multiple}
+        open={open}
         onOpen={() => {
           setOpen(true);
         }}
-        onClose={(e) => {
-          setOpen(false);
-          setSearchQuery("");
-          onClose?.(e);
-        }}
-        renderValue={(selected) => {
-          const placeholderValue = placeholder || "";
-
-          const Value = (renderValue ? renderValue : defaultRenderValue)(
+        onClose={handleClose}
+        renderValue={(selected) =>
+          renderSelectedValue(
             selected,
-            multiple ? optionsByValue : optionsByValue[selected as string]
-          );
-
-          const renderReturnValue = (returnValue: React.ReactNode) => {
-            return (
-              <div
-                className={twMerge(
-                  "grid grid-flow-col justify-between w-full gap-[8px]",
-                  renderedValueClassName
-                )}
-              >
-                {returnValue}
-                <div className={open ? " h-max rotate-180" : "h-max"}>
-                  {IconComponent ? (
-                    <IconComponent />
-                  ) : (
-                    <img src={ChevronDown} alt="icon" />
-                  )}
-                </div>
-              </div>
-            );
-          };
-          if (!Value || values.length === 0) {
-            return renderReturnValue(placeholderValue);
-          }
-
-          return renderReturnValue(Value);
-        }}
+            StartIconComponent,
+            IconComponent
+              ? IconComponent
+              : () => (
+                  <span className="icon-park-outline_down text-sm font-bold" />
+                )
+          )
+        }
         onChange={onSelectedChange}
         classes={{
           ...classes,
@@ -211,16 +218,23 @@ const Select = (props: ISelectProps) => {
           ),
           icon: twMerge("!static mr-[12px]", classes?.icon),
           select: twMerge(
-            "!w-auto !text-[12px] !pr-[14px]",
+            "!w-auto !text-xs !pr-[14px]",
             className,
             classes?.select
           ),
+          outlined: "!border-0",
         }}
         MenuProps={{
-          classes: {
-            list: `!py-[16px]${searchable ? " !pt-0" : ""}`,
-          },
           autoFocus: false,
+          ...MenuProps,
+          classes: {
+            list: twMerge(
+              `!py-[16px] ${multiple ? "!pb-0" : ""} ${
+                searchable ? " !pt-0" : ""
+              }`,
+              MenuProps?.className
+            ),
+          },
         }}
         IconComponent={() => null}
         startAdornment={
@@ -238,40 +252,8 @@ const Select = (props: ISelectProps) => {
           ) : null
         }
       >
-        {searchable && (
-          <div
-            className={twMerge(
-              menuItemPadding,
-              "sticky top-0 bg-white z-[1] !py-[16px]"
-            )}
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-            }}
-          >
-            <Input
-              className="!pl-0 !rounded-[12px]"
-              startAdornment={<Search />}
-              startAdornmentProps={{
-                className: "!border-0",
-              }}
-              onKeyDown={(e) => {
-                e.stopPropagation();
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-              }}
-              placeholder="Search"
-              onChange={(value) => {
-                setSearchQuery(value.target.value);
-              }}
-            />
-          </div>
-        )}
-        {title && <p className="pl-4">{title}</p>}
         {/* <MenuList> */}
-        {multiple && showSelectAll && (
+        {multiple && Array.isArray(values) && showSelectAll && (
           <MenuItem
             value={selectAllOptionValue}
             className={twMerge(menuItemClassName, "!text-primary-main")}
@@ -280,7 +262,7 @@ const Select = (props: ISelectProps) => {
           </MenuItem>
         )}
         {options.map((option) => {
-          const { label, value, disabled } = option;
+          const { label, labelNode, value, disabled } = option;
           return (
             <MenuItem
               key={value}
@@ -298,67 +280,43 @@ const Select = (props: ISelectProps) => {
             >
               <div className="flex items-center">
                 {option.startAdornment}
-                {label}
+                {labelNode || label}
                 {option.endAdornment}
               </div>
-              {singleSelection && (
-                <Checkbox sx={{ "&.Mui-checked": { color: "#F58320" } }} />
-              )}
-              {multiple && (
-                <Checkbox sx={{ "&.Mui-checked": { color: "#F58320" } }} />
-                // <CheckboxComponent
-                //   checked={values.indexOf(value) > -1}
-                //   className="w-max"
-                // />
-              )}
             </MenuItem>
           );
         })}
         {/* </MenuList> */}
-        {/* {EoLProps?.show && (
-          <EoL
-            ref={EoLRef}
-            showLoader={EoLProps?.showLoader}
-            onVisible={EoLProps?.onVisible}
-            config={{
-              threshold: 0.1,
-              root: EoLRef?.current?.parentElement?.parentElement || null,
-            }}
-          />
-        )} */}
       </MUISelect>
-      {multiple && showChipPreview && values.length > 0 && (
-        <div className="mt-[8px]">
-          <div className="flex flex-wrap -mt-2">
-            {(values as string[]).map((value, index) => {
-              return (
-                <Chip
-                  key={index}
-                  label={optionsLabelByValue[value]}
-                  className="!text-[12px] !mr-2 !mt-2"
-                  deleteIcon={
-                    <img
-                      src={XClose}
-                      alt="icon"
-                      className="w-[16px] h-[16px]"
-                    />
-                  }
-                  onDelete={() => {
-                    onSelectedChange({
-                      target: {
-                        value: (values as string[]).filter(
-                          (item) => item !== value
-                        ),
-                      },
-                    } as SelectChangeEvent<unknown>);
-                  }}
-                />
-              );
-            })}
+
+      {multiple &&
+        Array.isArray(values) &&
+        showChipPreview &&
+        values.length > 0 && (
+          <div className="mt-[8px]">
+            <div className="flex flex-wrap -mt-2">
+              {(values as string[]).map((value, index) => {
+                return (
+                  <Chip
+                    key={index}
+                    label={optionsLabelByValue[value]}
+                    className="!text-xs !mr-2 !mt-2"
+                    deleteIcon={<span className="icon-x !text-base" />}
+                    onDelete={() => {
+                      onSelectedChange({
+                        target: {
+                          value: (values as string[]).filter(
+                            (item) => item !== value
+                          ),
+                        },
+                      } as SelectChangeEvent<unknown>);
+                    }}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
-      )}
-      <FieldHelperText error={props.error} helperText={helperText} />
+        )}
     </div>
   );
 };

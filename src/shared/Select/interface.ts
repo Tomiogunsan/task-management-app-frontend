@@ -10,6 +10,9 @@ export type ISelectOption = {
   disabled?: boolean;
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;
+  onSearch?: (value: string) => void;
+  StartIconComponent?: React.ElementType;
+  containerClassName?: string;
 };
 
 export type ISelectProps = Omit<

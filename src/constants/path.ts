@@ -1,3 +1,5 @@
+import { joinPath } from "helpers/navigation";
+
 export const AuthPaths = {
   SIGNIN: "signin",
   REGISTER: "register",
@@ -9,7 +11,7 @@ export const BasePaths = {
 
 export const UsersPath = {
   TEAM: "team",
-}
+};
 
 export const AuthPagePath = {
   signin: (appendRedirectUrl: boolean = false) =>
@@ -18,5 +20,16 @@ export const AuthPagePath = {
         ? `?redirect_url=${encodeURIComponent(window.location.pathname)}`
         : ""
     }`,
-  // newPasswordSuccess: () => `/${AuthPaths.CREATE_PASSWORD_SUCCESS}`,
+};
+
+// export const TeamPagePath = {
+//   id: (teamId: string, fullPath: boolean = true) =>
+//     joinPath(
+//       `${fullPath ? `/${BasePaths.USER}/` : ""}${UsersPath.TEAM}`,
+//       teamId
+//     ),
+// };
+export const TeamPagePath = {
+  id: (teamId: string) => `${BasePaths.USER}/${UsersPath.TEAM}/${teamId}`,
+    
 };
