@@ -15,6 +15,12 @@ const USER_SIDENAV = [
     icon: <RiTeamFill />,
     iconWhite: <RiTeamFill className="text-white" />,
   },
+  {
+    name: "Project",
+    path: UsersPath.PROJECT,
+    icon: <RiTeamFill />,
+    iconWhite: <RiTeamFill className="text-white" />,
+  },
 ];
 
 const SideNav = () => {
@@ -26,8 +32,6 @@ const SideNav = () => {
     logOut();
     navigate(AuthPagePath.signin(), { replace: true });
   };
-
-  
 
   return (
     <div className="overflow-auto bg-[#F7F7F8] flex flex-col border-r-2 border-[#F7F7F8] text-[#000] font-[Inter] h-screen">
@@ -53,10 +57,8 @@ const SideNav = () => {
             // }}
           >
             {pathName === sidenav.path ? (
-              
               <div>{sidenav.iconWhite} </div>
             ) : (
-              
               <div>{sidenav.icon} </div>
             )}
             <span>{sidenav.name}</span>

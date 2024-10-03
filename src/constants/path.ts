@@ -1,4 +1,4 @@
-import { joinPath } from "helpers/navigation";
+// import { joinPath } from "helpers/navigation";
 
 export const AuthPaths = {
   SIGNIN: "signin",
@@ -11,6 +11,7 @@ export const BasePaths = {
 
 export const UsersPath = {
   TEAM: "team",
+  PROJECT: "project",
 };
 
 export const AuthPagePath = {
@@ -31,5 +32,4 @@ export const AuthPagePath = {
 // };
 export const TeamPagePath = {
   id: (teamId: string) => `${BasePaths.USER}/${UsersPath.TEAM}/${teamId}`,
-    
 };

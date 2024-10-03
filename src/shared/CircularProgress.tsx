@@ -5,11 +5,12 @@ interface Props {
   size?: number;
   color?: string;
   className?: string;
+  colorClassName?:string
 }
 
 const CircularProgress: React.FC<Props> = ({
   size = 20,
-  color = 'white',
+  color =  colorClassName || 'white',
   className,
 }) => {
   return (

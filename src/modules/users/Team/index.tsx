@@ -6,6 +6,7 @@ import PageHeader from "shared/PageHeader";
 
 import Table from "shared/Table";
 import { ITableHead } from "shared/Table/interface";
+import TableLoading from "shared/tableLoading";
 
 const Team = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Team = () => {
       },
     },
   ];
-  const { data } = useGetTeamQuery(null);
+  const { data , isFetching } = useGetTeamQuery(null);
   console.log(data);
   return (
     <div className=" grid gap-y-8 pt-4">
@@ -31,6 +32,8 @@ const Team = () => {
         tableHeads={tableHead}
         dataTableSource={data?.data?.teams || []}
         onRowClick={({ _id: id }) => navigate(TeamPagePath.id(id))}
+        loading={isFetching}
+        tableLoader={<TableLoading title=" Loading Teams" />}
       />
     </div>
   );

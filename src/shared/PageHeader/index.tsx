@@ -1,22 +1,19 @@
-
-
 export type IPageHeaderProps = {
   title: React.ReactNode;
   icon?: React.ReactNode;
   actions?: React.ReactNode;
   children?: React.ReactNode;
-//   breadCrumb?: IBreadCrumbItem[];
+  //   breadCrumb?: IBreadCrumbItem[];
 };
-
 
 export default function PageHeader({
   title,
   icon,
- 
+
   actions,
   children,
 }: IPageHeaderProps) {
-//   const navigate = useNavigate();
+  //   const navigate = useNavigate();
   return (
     <>
       <header className="sticky top-0 bg-white z-20">
@@ -52,7 +49,9 @@ export default function PageHeader({
             </div>
 
             {actions && (
-              <div className="grid grid-flow-col gap-3">{actions}</div>
+              <div className="grid grid-flow-col gap-3 bg-[#0e6ce0] text-[#fff] px-4 py-2 rounded-md cursor-pointer border shadow-md">
+                {actions}
+              </div>
             )}
           </div>
         </div>
