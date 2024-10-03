@@ -7,6 +7,7 @@ import DropdownItems from "shared/Dropdown/DropdownItems";
 import { createRef } from "react";
 
 import { IAlignType, ITableBody, ITableHead, ITableProp } from "./interface";
+import { CiMenuKebab } from "react-icons/ci";
 
 const Table = <TData extends ITableBody>({
   tableHeads,
@@ -26,7 +27,6 @@ const Table = <TData extends ITableBody>({
   pageSize,
   currentPage,
   onPageChange,
-  
 }: ITableProp<TData>) => {
   const dataLength = total as number;
   const TableBodyRef = createRef<HTMLTableSectionElement>();
@@ -142,9 +142,13 @@ const Table = <TData extends ITableBody>({
 
                     {showMenu && (
                       <td
-                        className={twMerge(tableCellClassName, "relative")}
+                        className={twMerge(
+                          tableCellClassName,
+                          "relative"
+                        )}
                         align="right"
                       >
+                        
                         {(() => {
                           const itemOptions = (menuOptions || []).filter(
                             (menuItem) => {
@@ -160,14 +164,17 @@ const Table = <TData extends ITableBody>({
                           }
                           return (
                             <span
-                              className="flex justify-center bg-red-90p  -ml-5"
+                              className="flex justify-center bg-red-90p  -ml-5 "
                               onClick={(e) => {
                                 e.stopPropagation();
                               }}
                             >
                               <Dropdown
                                 trigger={
-                                  <div className="w-max rounded-full font-bold cursor-pointer p-2 icon-dots-vertical text-base hover:bg-gray-50"></div>
+                                 
+                                  <div className="w-max rounded-full font-bold cursor-pointer p-2 icon-dots-vertical text-base hover:bg-gray-50 ">
+                                    <CiMenuKebab />
+                                  </div>
                                 }
                                 onOpen={() => {
                                   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
