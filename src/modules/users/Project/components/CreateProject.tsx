@@ -1,13 +1,17 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createProjectSchema } from "@modules/users/validation";
-import { ICreateProjectSchema } from "@modules/users/validation/interface";
+
+import { ICreateProjectQuery } from "@services/interfaces/DTO/project";
+import { useCreateProjectMutation } from "@services/project.service";
+import { toastAlert } from "@utils/toastConfig";
 import { useForm } from "react-hook-form";
 import Button from "shared/Button";
+import CircularProgress from "shared/CircularProgress";
 import Drawer from "shared/Drawer";
 import ControlledInput from "shared/Input/ControlledInput";
 
 const CreateProject = ({ onClose }: { onClose: () => void }) => {
-  const { control, handleSubmit } = useForm<ICreateProjectSchema>({
+  const { control, handleSubmit } = useForm<ICreateProjectQuery>({
     defaultValues: {
       name: "",
       description: "",
@@ -15,8 +19,18 @@ const CreateProject = ({ onClose }: { onClose: () => void }) => {
     resolver: yupResolver(createProjectSchema),
   });
 
-  const handleCreate = (data: ICreateProjectSchema) => {
+  const [createProject, { isLoading }] = useCreateProjectMutation();
+
+  const handleCreate = async (data: ICreateProjectQuery) => {
     console.log(data);
+    try {
+      await createProject(data).unwrap();
+      onClose();
+      toastAlert.success("Project created successfully");
+    } catch (error) {
+      console.log(error);
+      toastAlert.error("Something went wrong");
+    }
   };
   return (
     <Drawer header="Create Project" action={{}} onClose={onClose}>
@@ -34,7 +48,9 @@ const CreateProject = ({ onClose }: { onClose: () => void }) => {
             rows={4}
           />
         </div>
-        <Button type="submit">Create</Button>
+        <Button type="submit">
+          {isLoading ? <CircularProgress /> : "Create"}
+        </Button>
       </form>
     </Drawer>
   );

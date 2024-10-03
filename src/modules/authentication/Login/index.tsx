@@ -34,7 +34,7 @@ const Login = () => {
     console.log(data);
     try {
       const res = (await login(data).unwrap()) as unknown as ILoginResponse;
-      console.log(res);
+    
       toastAlert.success("Logged in successfully");
       setToken(res.token);
       navigate(BasePaths.USER);

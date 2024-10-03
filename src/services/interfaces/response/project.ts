@@ -15,3 +15,10 @@ export type IGetProjectResponse = {
     project: IProject[];
   };
 };
+
+export type ICreateProjectResponse = {
+  status: string;
+  data: {
+    project: IProject[]
+  };
+};
