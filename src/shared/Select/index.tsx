@@ -4,22 +4,28 @@ import {
   Select as MUISelect,
   MenuItem,
   SelectChangeEvent,
-  Chip,
 } from "@mui/material";
 import { ISelectOption, ISelectProps } from "./interface";
-
-import React, { useEffect, useMemo, useState } from "react";
+import FieldHelperText from "shared/FieldHelperText";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { isEqual } from "lodash";
-
+import Input from "shared/Input";
 import { escapeRegExpChar } from "helpers/regex";
+
+import EoL from "shared/EoL";
+import { RiArrowDropDownLine } from "react-icons/ri";
 
 const selectAllOptionValue = "component~select~all~option";
 const Select = (props: ISelectProps) => {
   const {
+    label,
+    labelClassName,
+    labelContainerClassName,
     containerClassName,
+    labelEndAdornment,
 
     className,
-
+    helperText,
     startAdornment,
     endAdornment,
     options,
@@ -27,7 +33,7 @@ const Select = (props: ISelectProps) => {
     value,
     onChange,
     showSelectAll,
-    showChipPreview,
+
     renderValue,
     displayEmpty,
     placeholder,
@@ -37,7 +43,7 @@ const Select = (props: ISelectProps) => {
     searchable,
     renderedValueClassName,
     onSearch,
-
+    EoL: EoLProps,
     onClose,
 
     MenuProps,
@@ -150,7 +156,7 @@ const Select = (props: ISelectProps) => {
           {returnValue}
           {EndIcon && (
             <div className={twMerge("flex h-max", open ? "rotate-180" : "")}>
-              {<EndIcon />}
+              {<RiArrowDropDownLine size={20} />}
             </div>
           )}
         </div>
@@ -174,6 +180,8 @@ const Select = (props: ISelectProps) => {
     .filter((option) => !searchQuery || option.label.match(reg))
     .map((option) => option.value);
 
+  const EoLRef = useRef<HTMLDivElement>(null);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleClose = (e: any) => {
     setOpen(false);
@@ -188,6 +196,25 @@ const Select = (props: ISelectProps) => {
         containerClassName
       )}
     >
+      <div
+        className={twMerge(
+          "flex justify-between w-full",
+          labelContainerClassName
+        )}
+      >
+        {label && (
+          <label
+            className={twMerge(
+              labelClassName,
+              "text-[12px] text-gray-700 font-[400] align-left gap-[6px] block mb-[8px]"
+            )}
+          >
+            {label}
+          </label>
+        )}
+        {labelEndAdornment && labelEndAdornment}
+      </div>
+
       <MUISelect
         {...rest}
         displayEmpty={displayEmpty}
@@ -204,9 +231,7 @@ const Select = (props: ISelectProps) => {
             StartIconComponent,
             IconComponent
               ? IconComponent
-              : () => (
-                  <span className="icon-park-outline_down text-sm font-bold" />
-                )
+              : () => <span className="icon-chevron-down text-sm font-bold" />
           )
         }
         onChange={onSelectedChange}
@@ -252,6 +277,37 @@ const Select = (props: ISelectProps) => {
           ) : null
         }
       >
+        {searchable && (
+          <div
+            className={twMerge(
+              menuItemPadding,
+              "sticky top-0 bg-white z-[1] !py-[16px]"
+            )}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
+          >
+            <Input
+              className="!pl-0 !rounded-[12px]"
+              startAdornment={<span className="icon-search text-base" />}
+              startAdornmentProps={{
+                className: "!border-0",
+              }}
+              onKeyDown={(e) => {
+                e.stopPropagation();
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+              }}
+              placeholder="Search"
+              onChange={(value) => {
+                setSearchQuery(value.target.value);
+              }}
+            />
+          </div>
+        )}
         {/* <MenuList> */}
         {multiple && Array.isArray(values) && showSelectAll && (
           <MenuItem
@@ -287,36 +343,20 @@ const Select = (props: ISelectProps) => {
           );
         })}
         {/* </MenuList> */}
+        {EoLProps?.show && (
+          <EoL
+            ref={EoLRef}
+            showLoader={EoLProps?.showLoader}
+            onVisible={EoLProps?.onVisible}
+            config={{
+              threshold: 0.1,
+              root: EoLRef?.current?.parentElement?.parentElement || null,
+            }}
+          />
+        )}
       </MUISelect>
 
-      {multiple &&
-        Array.isArray(values) &&
-        showChipPreview &&
-        values.length > 0 && (
-          <div className="mt-[8px]">
-            <div className="flex flex-wrap -mt-2">
-              {(values as string[]).map((value, index) => {
-                return (
-                  <Chip
-                    key={index}
-                    label={optionsLabelByValue[value]}
-                    className="!text-xs !mr-2 !mt-2"
-                    deleteIcon={<span className="icon-x !text-base" />}
-                    onDelete={() => {
-                      onSelectedChange({
-                        target: {
-                          value: (values as string[]).filter(
-                            (item) => item !== value
-                          ),
-                        },
-                      } as SelectChangeEvent<unknown>);
-                    }}
-                  />
-                );
-              })}
-            </div>
-          </div>
-        )}
+      <FieldHelperText error={props.error} helperText={helperText} />
     </div>
   );
 };

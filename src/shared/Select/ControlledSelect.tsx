@@ -1,6 +1,6 @@
 import { Controller, FieldValues } from 'react-hook-form';
-import Select from '.';
 import { IControlledSelect } from './interface';
+import Select from '.';
 
 const ControlledSelect = <TFieldValue extends FieldValues>(
   props: IControlledSelect<TFieldValue>,
@@ -10,12 +10,11 @@ const ControlledSelect = <TFieldValue extends FieldValues>(
     <Controller
       control={control}
       name={cname}
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       render={({ field: { ref: _ref, ...fields }, fieldState }) => (
         <Select
-          {...rest}
           {...fields}
-          error={(fieldState.error?.message || '').length > 0}
+          {...rest}
+          error={!!fieldState.error}
           helperText={fieldState.error?.message}
         />
       )}

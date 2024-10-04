@@ -27,7 +27,8 @@ const Table = <TData extends ITableBody>({
   pageSize,
   currentPage,
   onPageChange,
-}: ITableProp<TData>) => {
+}: // EoL: EoLProps,
+ITableProp<TData>) => {
   const dataLength = total as number;
   const TableBodyRef = createRef<HTMLTableSectionElement>();
   const itemsPerPage = pageSize as number; // Number of items to display per page
@@ -142,13 +143,9 @@ const Table = <TData extends ITableBody>({
 
                     {showMenu && (
                       <td
-                        className={twMerge(
-                          tableCellClassName,
-                          "relative"
-                        )}
+                        className={twMerge(tableCellClassName, "relative")}
                         align="right"
                       >
-                        
                         {(() => {
                           const itemOptions = (menuOptions || []).filter(
                             (menuItem) => {
@@ -171,7 +168,6 @@ const Table = <TData extends ITableBody>({
                             >
                               <Dropdown
                                 trigger={
-                                 
                                   <div className="w-max rounded-full font-bold cursor-pointer p-2 icon-dots-vertical text-base hover:bg-gray-50 ">
                                     <CiMenuKebab />
                                   </div>

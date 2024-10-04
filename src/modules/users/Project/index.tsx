@@ -10,13 +10,17 @@ import TableLoading from "shared/tableLoading";
 import CreateProject from "./components/CreateProject";
 import EditProject from "./components/EditProject";
 import DeleteProject from "./components/DeleteProject";
+import { useAssignProjectMutation } from "@services/team.service";
+import AssignProject from "./components/AssignProject";
 
 const Project = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [projectData, setProjectData] = useState<IProject>();
+  const [assignDrawer, setassignDrawer] = useState(false);
   const { data, isFetching } = useGetProjectQuery(null);
+  const [assignProject, { isLoading }] = useAssignProjectMutation();
   const tableHead: ITableHead<IProject>[] = [
     {
       label: "Name",
@@ -47,8 +51,16 @@ const Project = () => {
     },
     {
       menuTitle: "Delete",
-      action: () => {
+      action: (data: IProject) => {
         setDeleteModal(true);
+        setProjectData(data);
+      },
+      className: "text-red-500",
+    },
+    {
+      menuTitle: "Assign Team",
+      action: () => {
+        setassignDrawer(true);
       },
     },
   ];
@@ -68,10 +80,19 @@ const Project = () => {
         tableLoader={<TableLoading title=" Loading Project" />}
       />
       {openDrawer && <CreateProject onClose={() => setOpenDrawer(false)} />}
-      {editModal && <EditProject onClose={() => setEditModal(false)}
-      projectData={projectData}
-      />}
-      {deleteModal && <DeleteProject onClose={() => setDeleteModal(false)} />}
+      {editModal && (
+        <EditProject
+          onClose={() => setEditModal(false)}
+          projectData={projectData}
+        />
+      )}
+      {deleteModal && (
+        <DeleteProject
+          onClose={() => setDeleteModal(false)}
+          projectData={projectData}
+        />
+      )}
+      {assignDrawer && <AssignProject onClose={() => setassignDrawer(false)} />}
     </div>
   );
 };

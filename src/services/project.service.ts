@@ -1,5 +1,10 @@
 import { configuredApi } from "@constants/createApi-common";
-import { CREATE_PROJECT, EDIT_PROJECT, GET_ALL_PROJECT } from "config/apiUrl";
+import {
+  CREATE_PROJECT,
+  DELETE_PROJECT,
+  EDIT_PROJECT,
+  GET_ALL_PROJECT,
+} from "config/apiUrl";
 import {
   ICreateProjectResponse,
   IGetProjectResponse,
@@ -45,6 +50,14 @@ export const projectApi = configuredApi
         }),
         invalidatesTags: ["allProjects"],
       }),
+      deleteProject: build.mutation<IDeleteProjectResponse , string>({
+        query: (id: string) => ({
+          method: "DELETE",
+          url: DELETE_PROJECT(id),
+          version: "v1",
+        }),
+        invalidatesTags: ["allProjects"],
+      }),
     }),
   });
 
@@ -52,4 +65,5 @@ export const {
   useGetProjectQuery,
   useCreateProjectMutation,
   useEditProjectMutation,
+  useDeleteProjectMutation,
 } = projectApi;

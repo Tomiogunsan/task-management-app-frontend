@@ -1,45 +1,60 @@
 import { SelectProps } from '@mui/material';
-import { IFieldHelperTextProps } from '../FieldHelperText/interface';
-import { IBaseControlledField } from '../Input/interface';
+import React from 'react';
 import { FieldValues } from 'react-hook-form';
+import { IFieldHelperTextProps } from 'shared/FieldHelperText/interface';
+import { IFieldLabelHelperTextProps } from 'shared/FieldLabelHelperText/interface';
+import { IBaseControlledField } from 'shared/interface';
 
 export type ISelectOption = {
   label: string;
-  value: string;
+  value: string | number;
   onClick?: () => void;
   disabled?: boolean;
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;
-  onSearch?: (value: string) => void;
-  StartIconComponent?: React.ElementType;
-  containerClassName?: string;
+  labelNode?: React.ReactNode;
 };
 
 export type ISelectProps = Omit<
   SelectProps,
-  "onChange" | "placeholder" | "renderValue"
+  'onChange' | 'placeholder' | 'renderValue'
 > &
   IFieldHelperTextProps & {
     label?: string;
-    labelClassName?: string;
     labelContainerClassName?: string;
-    
+    containerClassName?: string;
+    labelClassName?: string;
+    labelEndAdornment?: React.ReactNode;
+    labelHelperTextProps?: Omit<IFieldLabelHelperTextProps, 'children'>;
     labelHelperText?: React.ReactNode;
+    actionText?: React.ReactNode;
     options: ISelectOption[];
-    onChange?: (value: string | string[]) => void;
+    StartIconComponent?: React.ElementType;
+    onChange?: (
+      // eslint-disable-next-line no-unused-vars
+      value: ISelectOption['value'] | ISelectOption['value'][],
+    ) => void;
     showSelectAll?: boolean;
     showChipPreview?: boolean;
-    placeholder?: React.ReactNode | string;
+    placeholder?: React.ReactNode;
     searchable?: boolean;
-    asteric?: boolean;
-    title?: string;
-    renderedValueClassName?: string;
-    singleSelection?: boolean;
-
+    EoL?: {
+      show?: boolean;
+      // eslint-disable-next-line no-unused-vars
+      onVisible: (entryItem: IntersectionObserverEntry) => void;
+      showLoader: boolean;
+    };
+    // eslint-disable-next-line no-unused-vars
+    onSearch?: (value: string) => void;
+    // eslint-disable-next-line no-unused-vars
     renderValue?: (
+      // eslint-disable-next-line no-unused-vars
       selected: unknown,
-      options: ISelectOption | Record<string, ISelectOption>
+      // eslint-disable-next-line no-unused-vars
+      options: ISelectOption | Record<string, ISelectOption>,
     ) => React.ReactNode | string | number;
+    renderedValueClassName?: string;
+    previewMode?: boolean;
   };
 
 export type IControlledSelect<TFieldValues extends FieldValues> =

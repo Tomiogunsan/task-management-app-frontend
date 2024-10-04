@@ -22,7 +22,6 @@ const CreateProject = ({ onClose }: { onClose: () => void }) => {
   const [createProject, { isLoading }] = useCreateProjectMutation();
 
   const handleCreate = async (data: ICreateProjectQuery) => {
-    console.log(data);
     try {
       await createProject(data).unwrap();
       onClose();
@@ -33,10 +32,10 @@ const CreateProject = ({ onClose }: { onClose: () => void }) => {
     }
   };
   return (
-    <Drawer header="Create Project" action={{}} onClose={onClose}>
+    <Drawer header="Create Project" onClose={onClose}>
       <form
         className="flex flex-col justify-between h-[668px]"
-        onSubmit={handleSubmit(handleCreate, (err) => console.log(err))}
+        onSubmit={handleSubmit(handleCreate)}
       >
         <div className="grid gap-y-8">
           <ControlledInput name="name" label="Name" control={control} />

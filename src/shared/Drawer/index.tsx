@@ -26,7 +26,7 @@ IModalProps) => {
     ...propsAction,
   };
   return (
-    <div className="fixed flex inset-0 z-[99999] transition-opacity w-[100vw] h-[100vh]">
+    <div className="fixed flex inset-0 z-[100] transition-opacity w-[100vw] h-[100vh]">
       <div
         className="fixed inset-0 z-[0] bg-gray-500 bg-opacity-75 w-[100vw] h-[100vh]"
         onClick={() => {

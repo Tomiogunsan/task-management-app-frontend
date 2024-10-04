@@ -16,10 +16,14 @@ export type IGetProjectResponse = {
   };
 };
 
-
 export type ICreateProjectResponse = {
   status: string;
   data: {
-    project: IProject[]
+    project: IProject[];
   };
+};
+
+export type IDeleteProjectResponse = {
+  status: string;
+  message: string;
 };

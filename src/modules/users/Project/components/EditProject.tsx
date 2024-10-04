@@ -9,6 +9,7 @@ import Button from "shared/Button";
 import CircularProgress from "shared/CircularProgress";
 import ControlledInput from "shared/Input/ControlledInput";
 import Modal from "shared/Modal";
+import ControlledSelect from "shared/Select/ControlledSelect";
 
 type Props = {
   projectData: IProject | undefined;
@@ -52,6 +53,10 @@ const EditProject = ({ onClose, projectData }: Props) => {
             multiline
             rows={4}
           />
+          <ControlledSelect name='boy' control={control} options={[{
+            label: 'boy',
+            value: 'boy'
+          }]}/>
         </div>
         <Button type="submit">
           {isLoading ? <CircularProgress /> : "Save Changes"}
