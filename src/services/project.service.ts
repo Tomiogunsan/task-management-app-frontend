@@ -1,6 +1,9 @@
 import { configuredApi } from "@constants/createApi-common";
-import { CREATE_PROJECT, GET_ALL_PROJECT } from "config/apiUrl";
-import { ICreateProjectResponse, IGetProjectResponse } from "./interfaces/response/project";
+import { CREATE_PROJECT, EDIT_PROJECT, GET_ALL_PROJECT } from "config/apiUrl";
+import {
+  ICreateProjectResponse,
+  IGetProjectResponse,
+} from "./interfaces/response/project";
 import { ICreateProjectQuery } from "./interfaces/DTO/project";
 
 export const projectApi = configuredApi
@@ -30,7 +33,23 @@ export const projectApi = configuredApi
         }),
         invalidatesTags: ["allProjects"],
       }),
+      editProject: build.mutation<
+        IGetProjectResponse,
+        { projectId: string; data: ICreateProjectQuery }
+      >({
+        query: ({ projectId, data }) => ({
+          method: "PATCH",
+          url: EDIT_PROJECT(projectId),
+          version: "v1",
+          data,
+        }),
+        invalidatesTags: ["allProjects"],
+      }),
     }),
   });
 
-export const { useGetProjectQuery, useCreateProjectMutation } = projectApi;
+export const {
+  useGetProjectQuery,
+  useCreateProjectMutation,
+  useEditProjectMutation,
+} = projectApi;

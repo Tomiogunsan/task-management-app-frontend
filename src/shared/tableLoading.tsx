@@ -11,11 +11,11 @@ const TableLoading = ({
   return (
     <div
       className={twMerge(
-        'font-title h-[400px] flex flex-col justify-center items-center py-5 text-gray-500 bg-white w-full',
-        className,
+        "font-title h-[400px] flex flex-col justify-center items-center py-5 text-gray-500 bg-white w-full",
+        className
       )}
     >
-      <CircularProgress size={30} colorClassName='#000'/>
+      <CircularProgress size={40} className="bg-blue-700 rounded-lg" />
       <p className="mt-[25px]">{title}</p>
     </div>
   );

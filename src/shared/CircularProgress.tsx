@@ -5,17 +5,17 @@ interface Props {
   size?: number;
   color?: string;
   className?: string;
-  colorClassName?:string
+
 }
 
 const CircularProgress: React.FC<Props> = ({
   size = 20,
-  color =  colorClassName || 'white',
+  color = "#B3CBE3",
   className,
 }) => {
   return (
     <svg
-      className={twMerge('animate-spin duration-500', className)}
+      className={twMerge("animate-spin duration-500", className)}
       fill="none"
       height={size}
       viewBox={`0 0 ${20} ${20}`}

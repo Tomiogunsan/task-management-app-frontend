@@ -15,6 +15,7 @@ const Project = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [projectData, setProjectData] = useState<IProject>();
   const { data, isFetching } = useGetProjectQuery(null);
   const tableHead: ITableHead<IProject>[] = [
     {
@@ -39,8 +40,9 @@ const Project = () => {
   const menu = [
     {
       menuTitle: "Edit",
-      action: () => {
+      action: (data: IProject) => {
         setEditModal(true);
+        setProjectData(data);
       },
     },
     {
@@ -66,7 +68,9 @@ const Project = () => {
         tableLoader={<TableLoading title=" Loading Project" />}
       />
       {openDrawer && <CreateProject onClose={() => setOpenDrawer(false)} />}
-      {editModal && <EditProject onClose={() => setEditModal(false)} />}
+      {editModal && <EditProject onClose={() => setEditModal(false)}
+      projectData={projectData}
+      />}
       {deleteModal && <DeleteProject onClose={() => setDeleteModal(false)} />}
     </div>
   );
