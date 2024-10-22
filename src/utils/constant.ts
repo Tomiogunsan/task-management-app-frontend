@@ -14,3 +14,17 @@ export const formatDate = ({
     return format(new Date(date), "dd MMM, yyyy");
   }
 };
+
+
+export const capitalize = (text: string | number | undefined) => {
+  if (text === null || typeof text !== 'string') return;
+
+  const words = text.includes('_') ? text.split('_') : text.split(' ');
+
+  const output = words.map(word => {
+    const capitalizedWord =
+      word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase();
+    return capitalizedWord;
+  });
+  return output.join(' ');
+};

@@ -1,6 +1,6 @@
 import { IMembers } from "@services/interfaces/response/team";
 import { useGetTeamMembersQuery } from "@services/team.service";
-import { formatDate } from "@utils/constant";
+import { capitalize, formatDate } from "@utils/constant";
 import { useParams } from "react-router-dom";
 import PageHeader from "shared/PageHeader";
 import Table from "shared/Table";
@@ -16,6 +16,9 @@ const Members = () => {
     {
       label: "Name",
       accessor: "name",
+      render: ({name}) => {
+        return capitalize(name)
+      }
     },
     {
       label: "Email",
