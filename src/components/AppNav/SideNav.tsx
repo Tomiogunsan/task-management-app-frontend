@@ -11,13 +11,13 @@ import { logOut } from "helpers/auth";
 const USER_SIDENAV = [
   {
     name: "Team",
-    path: UsersPath.TEAM,
+    path: UsersPath.TEAM(),
     icon: <RiTeamFill />,
     iconWhite: <RiTeamFill className="text-white" />,
   },
   {
     name: "Project",
-    path: UsersPath.PROJECT,
+    path: UsersPath.PROJECT(),
     icon: <RiTeamFill />,
     iconWhite: <RiTeamFill className="text-white" />,
   },

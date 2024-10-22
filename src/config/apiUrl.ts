@@ -7,3 +7,5 @@ export const EDIT_PROJECT = (id: string) => `project/${id}`;
 export const DELETE_PROJECT = (id: string) => `project/${id}`;
 export const ASSIGN_PROJECT_TO_TEAM = (id: string) =>
   `team/${id}/assign-project`;
+export const ADD_TEAM = `team`;
+export const GET_TEAM_MEMBERS = (id: string) => `team/${id}/member`;

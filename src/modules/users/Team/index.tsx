@@ -3,39 +3,62 @@ import { ITeams } from "@services/interfaces/response/team";
 import { useGetTeamQuery } from "@services/team.service";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "shared/PageHeader";
-
+import { useState } from "react";
 import Table from "shared/Table";
+
 import { ITableHead } from "shared/Table/interface";
 import TableLoading from "shared/tableLoading";
+import AddTeam from "./components/AddTeam";
+import { formatDate } from "@utils/constant";
 
 const Team = () => {
   const navigate = useNavigate();
+  const [openDrawer, setOpenDrawer] = useState(false);
   const tableHead: ITableHead<ITeams>[] = [
     {
       label: "Name",
       accessor: "name",
     },
     {
+      label: "Description",
+      accessor: "description",
+    },
+    {
       label: "Project",
       accessor: "projects",
       render: ({ projects }) => {
-        return projects.name;
+        return projects?.name || "--";
+      },
+    },
+    {
+      label: "Date Created",
+      accessor: "dateCreated",
+      render: ({ dateCreated }) => {
+        return !dateCreated
+          ? "--"
+          : formatDate({ date: dateCreated, time: true });
       },
     },
   ];
-  const { data , isFetching } = useGetTeamQuery(null);
-  console.log(data);
+  const { data, isFetching } = useGetTeamQuery(null);
+  console.log(data?.data?.teams);
   return (
-    <div className=" grid gap-y-8 pt-4">
-      <PageHeader title="Team" />
-      <Table<ITeams>
-        tableHeads={tableHead}
-        dataTableSource={data?.data?.teams || []}
-        onRowClick={({ _id: id }) => navigate(TeamPagePath.id(id))}
-        loading={isFetching}
-        tableLoader={<TableLoading title=" Loading Teams" />}
-      />
-    </div>
+    <>
+      <div className=" grid gap-y-8 pt-4">
+        <PageHeader
+          title="Team"
+          actions={<div onClick={() => setOpenDrawer(true)}>Add Team</div>}
+        />
+        <Table<ITeams>
+          tableHeads={tableHead}
+          dataTableSource={data?.data?.teams || []}
+          onRowClick={({ _id: id }) => navigate(TeamPagePath.teamDetails(id))}
+          loading={isFetching}
+          tableLoader={<TableLoading title=" Loading Teams" />}
+        />
+      </div>
+      {openDrawer && <AddTeam onClose={() => setOpenDrawer(false)} />}
+    </>
   );
 };
 

@@ -1,10 +1,16 @@
 import { configuredApi } from "@constants/createApi-common";
-import { ASSIGN_PROJECT_TO_TEAM, GET_ALL_TEAM } from "config/apiUrl";
-import { IGetTeamResponse } from "./interfaces/response/team";
+import {
+  ADD_TEAM,
+  ASSIGN_PROJECT_TO_TEAM,
+  GET_ALL_TEAM,
+  GET_TEAM_MEMBERS,
+} from "config/apiUrl";
+import { IGetMembersResponse, IGetTeamResponse } from "./interfaces/response/team";
+import { IAddTeamQuery } from "./interfaces/DTO/team";
 
 export const teamApi = configuredApi
   .enhanceEndpoints({
-    addTagTypes: ["allTeams"],
+    addTagTypes: ["allTeams", "allMembers"],
   })
   .injectEndpoints({
     overrideExisting: true,
@@ -16,6 +22,23 @@ export const teamApi = configuredApi
           version: "v1",
         }),
         providesTags: ["allTeams"],
+      }),
+      addTeam: build.mutation<IGetTeamResponse, IAddTeamQuery>({
+        query: (data) => ({
+          method: "POST",
+          url: ADD_TEAM,
+          version: "v1",
+          data,
+        }),
+        invalidatesTags: ["allTeams"],
+      }),
+      getTeamMembers: build.query<IGetMembersResponse, string>({
+        query: (id) => ({
+          method: "GET",
+          url: GET_TEAM_MEMBERS(id),
+          version: "v1",
+        }),
+        providesTags: ["allMembers"],
       }),
       assignProject: build.mutation<
         unknown,
@@ -32,4 +55,8 @@ export const teamApi = configuredApi
     }),
   });
 
-export const { useGetTeamQuery, useAssignProjectMutation } = teamApi;
+export const { useGetTeamQuery, useAssignProjectMutation,
+   useAddTeamMutation,
+  useGetTeamMembersQuery
+  } =
+  teamApi;

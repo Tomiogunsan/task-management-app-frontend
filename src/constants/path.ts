@@ -1,17 +1,15 @@
-// import { joinPath } from "helpers/navigation";
-
 export const AuthPaths = {
   SIGNIN: "signin",
   REGISTER: "register",
 };
 
 export const BasePaths = {
-  USER: "/user",
+  USER: (fullPath: boolean = true) => (fullPath ? "/user" : ""),
 };
 
 export const UsersPath = {
-  TEAM: "team",
-  PROJECT: "project",
+  TEAM: (fullPath: boolean = true) => `${BasePaths.USER(fullPath)}/team`,
+  PROJECT: (fullPath: boolean = true) => `${BasePaths.USER(fullPath)}/project`,
 };
 
 export const AuthPagePath = {
@@ -23,13 +21,12 @@ export const AuthPagePath = {
     }`,
 };
 
-// export const TeamPagePath = {
-//   id: (teamId: string, fullPath: boolean = true) =>
-//     joinPath(
-//       `${fullPath ? `/${BasePaths.USER}/` : ""}${UsersPath.TEAM}`,
-//       teamId
-//     ),
-// };
 export const TeamPagePath = {
-  id: (teamId: string) => `${BasePaths.USER}/${UsersPath.TEAM}/${teamId}`,
+  teamDetails: (teamId: string, fullPath: boolean = true) =>
+    `${UsersPath.TEAM(fullPath)}/${teamId}`,
+  teamMemberDetails: (
+    teamId: string,
+    memberId: string,
+    fullPath: boolean = true
+  ) => `${TeamPagePath.teamDetails(teamId, fullPath)}/members/${memberId}`,
 };

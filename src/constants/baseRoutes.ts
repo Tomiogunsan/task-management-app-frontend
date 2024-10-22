@@ -11,7 +11,7 @@ const BaseRoutes = [
     useAuth: false,
   },
   {
-    path: `${BasePaths.USER}/*`,
+    path: `${BasePaths.USER()}/*`,
     exact: true,
     component: lazy(() => import("../routes/index")),
     Layout: RootLayout,
