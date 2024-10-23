@@ -1,19 +1,30 @@
 import { configuredApi } from "@constants/createApi-common";
 import {
   CREATE_PROJECT,
+  CREATE_PROJECT_TASK,
   DELETE_PROJECT,
+  DELETE_TASK,
   EDIT_PROJECT,
   GET_ALL_PROJECT,
+  GET_ALL_PROJECT_TASK,
 } from "config/apiUrl";
 import {
   ICreateProjectResponse,
+  ICreateProjectTaskResponse,
+  IDeleteProjectResponse,
+  IDeleteTaskResponse,
+  IGetAllProjectTask,
   IGetProjectResponse,
 } from "./interfaces/response/project";
-import { ICreateProjectQuery } from "./interfaces/DTO/project";
+import {
+  ICreateProjectQuery,
+  ICreateProjectTaskQuery,
+  IDeleteTaskQuery,
+} from "./interfaces/DTO/project";
 
 export const projectApi = configuredApi
   .enhanceEndpoints({
-    addTagTypes: ["allProjects"],
+    addTagTypes: ["allProjects", "allTasks"],
   })
   .injectEndpoints({
     overrideExisting: true,
@@ -50,13 +61,41 @@ export const projectApi = configuredApi
         }),
         invalidatesTags: ["allProjects"],
       }),
-      deleteProject: build.mutation<IDeleteProjectResponse , string>({
-        query: (id: string) => ({
+      deleteProject: build.mutation<IDeleteProjectResponse, string>({
+        query: (id) => ({
           method: "DELETE",
           url: DELETE_PROJECT(id),
           version: "v1",
         }),
         invalidatesTags: ["allProjects"],
+      }),
+      getAllProjectTask: build.query<IGetAllProjectTask, string>({
+        query: (id) => ({
+          method: "GET",
+          url: GET_ALL_PROJECT_TASK(id),
+          version: "v1",
+        }),
+        providesTags: ["allTasks"],
+      }),
+      createProjectTask: build.mutation<
+        ICreateProjectTaskResponse,
+        ICreateProjectTaskQuery
+      >({
+        query: (data) => ({
+          method: "POST",
+          url: CREATE_PROJECT_TASK(data.id),
+          version: "v1",
+          data,
+        }),
+        invalidatesTags: ["allTasks"],
+      }),
+      deleteTask: build.mutation<IDeleteTaskResponse, IDeleteTaskQuery>({
+        query: (data) => ({
+          method: "DELETE",
+          url: DELETE_TASK(data.projectId, data.taskId),
+          version: "v1",
+        }),
+        invalidatesTags: ["allTasks"],
       }),
     }),
   });
@@ -66,4 +105,7 @@ export const {
   useCreateProjectMutation,
   useEditProjectMutation,
   useDeleteProjectMutation,
+  useGetAllProjectTaskQuery,
+  useCreateProjectTaskMutation,
+  useDeleteTaskMutation,
 } = projectApi;

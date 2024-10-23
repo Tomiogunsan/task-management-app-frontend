@@ -9,3 +9,7 @@ export const addTeamSchema = yup.object({
   name: yup.string().required("Name is required"),
   description: yup.string().required("Name is required"),
 });
+export const addTaskSchema = yup.object({
+  name: yup.string().required("Name is required"),
+  description: yup.string().required("Name is required"),
+});

@@ -12,8 +12,11 @@ import EditProject from "./components/EditProject";
 import DeleteProject from "./components/DeleteProject";
 import { useAssignProjectMutation } from "@services/team.service";
 import AssignProject from "./components/AssignProject";
+import { useNavigate } from "react-router-dom";
+import { ProjectPagePath } from "@constants/path";
 
 const Project = () => {
+  const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -77,6 +80,9 @@ const Project = () => {
         loading={isFetching}
         showMenu
         menuOptions={menu}
+        onRowClick={({ _id }) => {
+          navigate(ProjectPagePath.projectDetails(_id));
+        }}
         tableLoader={<TableLoading title=" Loading Project" />}
       />
       {openDrawer && <CreateProject onClose={() => setOpenDrawer(false)} />}

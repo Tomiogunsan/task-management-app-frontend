@@ -9,7 +9,7 @@ import Table from "shared/Table";
 import { ITableHead } from "shared/Table/interface";
 import TableLoading from "shared/tableLoading";
 import AddTeam from "./components/AddTeam";
-import { formatDate } from "@utils/constant";
+import { capitalize, formatDate } from "@utils/constant";
 
 const Team = () => {
   const navigate = useNavigate();
@@ -18,6 +18,9 @@ const Team = () => {
     {
       label: "Name",
       accessor: "name",
+      render: ({ name }) => {
+        return capitalize(name);
+      },
     },
     {
       label: "Description",
@@ -41,7 +44,7 @@ const Team = () => {
     },
   ];
   const { data, isFetching } = useGetTeamQuery(null);
-  console.log(data?.data?.teams);
+ 
   return (
     <>
       <div className=" grid gap-y-8 pt-4">

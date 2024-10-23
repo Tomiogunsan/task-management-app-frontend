@@ -30,3 +30,8 @@ export const TeamPagePath = {
     fullPath: boolean = true
   ) => `${TeamPagePath.teamDetails(teamId, fullPath)}/members/${memberId}`,
 };
+
+export const ProjectPagePath = {
+  projectDetails: (projectId: string, fullPath: boolean = true) =>
+    `${UsersPath.PROJECT(fullPath)}/${projectId}`,
+};
