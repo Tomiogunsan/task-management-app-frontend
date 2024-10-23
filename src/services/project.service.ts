@@ -5,6 +5,7 @@ import {
   DELETE_PROJECT,
   DELETE_TASK,
   EDIT_PROJECT,
+  EDIT_TASK,
   GET_ALL_PROJECT,
   GET_ALL_PROJECT_TASK,
 } from "config/apiUrl";
@@ -20,6 +21,7 @@ import {
   ICreateProjectQuery,
   ICreateProjectTaskQuery,
   IDeleteTaskQuery,
+  IEditTaskQuery,
 } from "./interfaces/DTO/project";
 
 export const projectApi = configuredApi
@@ -97,6 +99,15 @@ export const projectApi = configuredApi
         }),
         invalidatesTags: ["allTasks"],
       }),
+      editTask: build.mutation<ICreateProjectTaskResponse, IEditTaskQuery>({
+        query: (data) => ({
+          method: "PATCH",
+          url: EDIT_TASK(data.projectId, data.taskId),
+          version: "v1",
+          data,
+        }),
+        invalidatesTags: ["allTasks"],
+      }),
     }),
   });
 
@@ -108,4 +119,5 @@ export const {
   useGetAllProjectTaskQuery,
   useCreateProjectTaskMutation,
   useDeleteTaskMutation,
+  useEditTaskMutation,
 } = projectApi;

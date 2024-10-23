@@ -15,3 +15,5 @@ export const GET_ALL_PROJECT_TASK = (id: string) => `project/${id}/task`;
 export const CREATE_PROJECT_TASK = (id: string) => `project/${id}/task`;
 export const DELETE_TASK = (projectId: string, taskId: string) =>
   `project/${projectId}/task/${taskId}`;
+export const EDIT_TASK = (projectId: string, taskId: string) =>
+  `project/${projectId}/task/${taskId}`;

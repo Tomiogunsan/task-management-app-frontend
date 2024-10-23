@@ -8,10 +8,11 @@ import { useParams } from "react-router-dom";
 import { useGetAllProjectTaskQuery } from "@services/project.service";
 import { ITask } from "@services/interfaces/response/project";
 import { ITableHead } from "shared/Table/interface";
-import { capitalize, formatDate } from "@utils/constant";
+import {  formatDate } from "@utils/constant";
 import TableLoading from "shared/tableLoading";
 import EditTask from "./components/EditTask";
 import DeleteTask from "./components/DeleteTask";
+import { capitalize } from "lodash";
 
 const Task = () => {
   const { projectId } = useParams();
@@ -62,7 +63,8 @@ const Task = () => {
   const menu = [
     {
       menuTitle: "Edit",
-      action: () => {
+      action: (data: ITask) => {
+        setTask(data);
         setOpenEditModal(true);
       },
     },
@@ -93,7 +95,12 @@ const Task = () => {
         />
       </div>
       {openDrawer && <CreateTask onClose={() => setOpenDrawer(false)} />}
-      {openEditModal && <EditTask onClose={() => setOpenEditModal(false)} />}
+      {openEditModal && (
+        <EditTask
+          onClose={() => setOpenEditModal(false)}
+          task={task as ITask}
+        />
+      )}
       {openDeleteModal && (
         <DeleteTask
           onClose={() => setOpenDeleteModal(false)}
