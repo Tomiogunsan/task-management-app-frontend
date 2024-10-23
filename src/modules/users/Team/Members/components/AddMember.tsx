@@ -29,19 +29,17 @@ const AddMember = ({ onClose }: Props) => {
   const { data, isFetching } = useGetUsersQuery(null);
   const [addMemberToTeam, { isLoading }] = useAddMemberToTeamMutation();
   const handleAddMember = async (data: IFormValues) => {
-    console.log(data.memberId);
     const payload = {
       id: teamId as string,
       memberId: data?.memberId,
     };
-    console.log(payload);
+
     try {
-      const res = await addMemberToTeam(payload).unwrap();
-      console.log(res);
+      await addMemberToTeam(payload).unwrap();
+
       onClose();
       toastAlert.success("Member added successfully");
     } catch (error) {
-      console.log(error);
       const { message } = error as unknown as IAddMemberErrorResponse;
       toastAlert.error(message || "Something went wrong");
     }
