@@ -38,3 +38,13 @@ export type IGetMembersResponse = {
     members: IMembers[];
   };
 };
+
+export type IAddMemberErrorResponse = {
+  status: string;
+  message: string;
+};
+
+export type IAddMemberResponse = {
+  status: string;
+  message: string;
+};

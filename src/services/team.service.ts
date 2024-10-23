@@ -1,11 +1,16 @@
 import { configuredApi } from "@constants/createApi-common";
 import {
+  ADD_MEMBER_TO_TEAM,
   ADD_TEAM,
   ASSIGN_PROJECT_TO_TEAM,
   GET_ALL_TEAM,
   GET_TEAM_MEMBERS,
 } from "config/apiUrl";
-import { IGetMembersResponse, IGetTeamResponse } from "./interfaces/response/team";
+import {
+  IAddMemberResponse,
+  IGetMembersResponse,
+  IGetTeamResponse,
+} from "./interfaces/response/team";
 import { IAddTeamQuery } from "./interfaces/DTO/team";
 
 export const teamApi = configuredApi
@@ -52,11 +57,27 @@ export const teamApi = configuredApi
         }),
         invalidatesTags: ["allTeams"],
       }),
+      addMemberToTeam: build.mutation<
+        IAddMemberResponse,
+        { id: string; memberId: string }
+      >({
+        query: (data) => ({
+          method: "PATCH",
+          url: ADD_MEMBER_TO_TEAM(data.id as string),
+          version: "v1",
+          data: {
+            memberId: data.memberId,
+          },
+        }),
+        invalidatesTags: ["allMembers"],
+      }),
     }),
   });
 
-export const { useGetTeamQuery, useAssignProjectMutation,
-   useAddTeamMutation,
-  useGetTeamMembersQuery
-  } =
-  teamApi;
+export const {
+  useGetTeamQuery,
+  useAssignProjectMutation,
+  useAddTeamMutation,
+  useGetTeamMembersQuery,
+  useAddMemberToTeamMutation,
+} = teamApi;
