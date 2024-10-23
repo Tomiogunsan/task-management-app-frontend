@@ -44,6 +44,7 @@ const AddMember = ({ onClose }: Props) => {
       toastAlert.error(message || "Something went wrong");
     }
   };
+  console.log('test')
   return (
     <Drawer onClose={onClose} header="Add a member">
       <form
