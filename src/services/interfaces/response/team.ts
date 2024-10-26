@@ -48,3 +48,16 @@ export type IAddMemberResponse = {
   status: string;
   message: string;
 };
+
+export type IAssignProjectErrorResponse = {
+  status: string;
+  message: string;
+};
+
+export type IAssignProjectResponse = {
+  status: string;
+  message: string;
+  data: {
+    team: ITeams;
+  };
+};

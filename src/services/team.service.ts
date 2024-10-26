@@ -8,6 +8,7 @@ import {
 } from "config/apiUrl";
 import {
   IAddMemberResponse,
+  IAssignProjectResponse,
   IGetMembersResponse,
   IGetTeamResponse,
 } from "./interfaces/response/team";
@@ -46,14 +47,16 @@ export const teamApi = configuredApi
         providesTags: ["allMembers"],
       }),
       assignProject: build.mutation<
-        unknown,
+        IAssignProjectResponse,
         { teamId: string; projectId: string }
       >({
-        query: ({ teamId, projectId }) => ({
-          method: "POST",
-          url: ASSIGN_PROJECT_TO_TEAM(teamId),
+        query: (data) => ({
+          method: "PATCH",
+          url: ASSIGN_PROJECT_TO_TEAM(data.teamId),
           version: "v1",
-          projectId,
+          data: {
+            projectId: data.projectId,
+          },
         }),
         invalidatesTags: ["allTeams"],
       }),

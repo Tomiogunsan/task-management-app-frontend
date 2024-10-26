@@ -10,7 +10,7 @@ import TableLoading from "shared/tableLoading";
 import CreateProject from "./components/CreateProject";
 import EditProject from "./components/EditProject";
 import DeleteProject from "./components/DeleteProject";
-import { useAssignProjectMutation } from "@services/team.service";
+
 import AssignProject from "./components/AssignProject";
 import { useNavigate } from "react-router-dom";
 import { ProjectPagePath } from "@constants/path";
@@ -23,7 +23,7 @@ const Project = () => {
   const [projectData, setProjectData] = useState<IProject>();
   const [assignDrawer, setassignDrawer] = useState(false);
   const { data, isFetching } = useGetProjectQuery(null);
-  const [assignProject, { isLoading }] = useAssignProjectMutation();
+
   const tableHead: ITableHead<IProject>[] = [
     {
       label: "Name",
@@ -61,9 +61,10 @@ const Project = () => {
       className: "text-red-500",
     },
     {
-      menuTitle: "Assign Team",
-      action: () => {
+      menuTitle: "Assign Project",
+      action: (data: IProject) => {
         setassignDrawer(true);
+        setProjectData(data);
       },
     },
   ];
@@ -98,7 +99,12 @@ const Project = () => {
           projectData={projectData}
         />
       )}
-      {assignDrawer && <AssignProject onClose={() => setassignDrawer(false)} />}
+      {assignDrawer && (
+        <AssignProject
+          onClose={() => setassignDrawer(false)}
+          projectData={projectData as IProject}
+        />
+      )}
     </div>
   );
 };
