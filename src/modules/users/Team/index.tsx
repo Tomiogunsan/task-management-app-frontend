@@ -10,10 +10,13 @@ import { ITableHead } from "shared/Table/interface";
 import TableLoading from "shared/tableLoading";
 import AddTeam from "./components/AddTeam";
 import { capitalize, formatDate } from "@utils/constant";
+import AssignTeamProject from "./components/AssignTeamProject";
 
 const Team = () => {
   const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [teamId, setTeamId] = useState("");
+  const [openAssignTeamProject, setOpenAssignTeamProject] = useState(false);
   const tableHead: ITableHead<ITeams>[] = [
     {
       label: "Name",
@@ -44,7 +47,17 @@ const Team = () => {
     },
   ];
   const { data, isFetching } = useGetTeamQuery(null);
- 
+
+  const menu = [
+    {
+      menuTitle: "Assign Project",
+      action: (data: ITeams) => {
+        setOpenAssignTeamProject(true);
+        setTeamId(data._id);
+      },
+    },
+  ];
+
   return (
     <>
       <div className=" grid gap-y-8 pt-4">
@@ -57,10 +70,18 @@ const Team = () => {
           dataTableSource={data?.data?.teams || []}
           onRowClick={({ _id: id }) => navigate(TeamPagePath.teamDetails(id))}
           loading={isFetching}
+          showMenu
+          menuOptions={menu}
           tableLoader={<TableLoading title=" Loading Teams" />}
         />
       </div>
       {openDrawer && <AddTeam onClose={() => setOpenDrawer(false)} />}
+      {openAssignTeamProject && (
+        <AssignTeamProject
+          onClose={() => setOpenAssignTeamProject(false)}
+          teamId={teamId}
+        />
+      )}
     </>
   );
 };

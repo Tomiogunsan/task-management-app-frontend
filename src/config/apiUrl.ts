@@ -17,3 +17,5 @@ export const DELETE_TASK = (projectId: string, taskId: string) =>
   `project/${projectId}/task/${taskId}`;
 export const EDIT_TASK = (projectId: string, taskId: string) =>
   `project/${projectId}/task/${taskId}`;
+export const ASSIGN_TASK_TO_MEMBER = (projectId: string, taskId: string) =>
+  `project/${projectId}/task/${taskId}/assign`;

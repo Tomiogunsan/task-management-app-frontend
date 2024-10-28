@@ -3,16 +3,18 @@ import {
   ADD_MEMBER_TO_TEAM,
   ADD_TEAM,
   ASSIGN_PROJECT_TO_TEAM,
+  ASSIGN_TASK_TO_MEMBER,
   GET_ALL_TEAM,
   GET_TEAM_MEMBERS,
 } from "config/apiUrl";
 import {
   IAddMemberResponse,
   IAssignProjectResponse,
+  IAssignTaskToMemberResponse,
   IGetMembersResponse,
   IGetTeamResponse,
 } from "./interfaces/response/team";
-import { IAddTeamQuery } from "./interfaces/DTO/team";
+import { IAddTeamQuery, IAssignTaskToMemberQuery } from "./interfaces/DTO/team";
 
 export const teamApi = configuredApi
   .enhanceEndpoints({
@@ -74,6 +76,20 @@ export const teamApi = configuredApi
         }),
         invalidatesTags: ["allMembers"],
       }),
+      assignTaskToMember: build.mutation<
+        IAssignTaskToMemberResponse,
+        IAssignTaskToMemberQuery
+      >({
+        query: (data) => ({
+          method: "PATCH",
+          url: ASSIGN_TASK_TO_MEMBER(data.projectId, data.taskId),
+          version: "v1",
+          data: {
+            userId: data.userId,
+          },
+        }),
+        invalidatesTags: ["allMembers"],
+      }),
     }),
   });
 
@@ -83,4 +99,5 @@ export const {
   useAddTeamMutation,
   useGetTeamMembersQuery,
   useAddMemberToTeamMutation,
+  useAssignTaskToMemberMutation
 } = teamApi;

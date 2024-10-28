@@ -1,3 +1,5 @@
+import { ITask } from "./project";
+
 export type ITeams = {
   members: string[];
   projects: {
@@ -23,7 +25,10 @@ export type IMembers = {
     emailNotifications: boolean;
   };
   role: string;
-  projects: [];
+  projects: {
+    _id: string;
+    name: string;
+  };
   teams: [];
   _id: string;
   name: string;
@@ -60,4 +65,17 @@ export type IAssignProjectResponse = {
   data: {
     team: ITeams;
   };
+};
+
+export type IAssignTaskToMemberResponse = {
+  status: string;
+  message: string;
+  data: {
+    task: ITask;
+  };
+};
+
+export type IAssignTaskToMemberErrorResponse = {
+  status: string;
+  message: string;
 };

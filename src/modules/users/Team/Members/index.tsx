@@ -10,13 +10,15 @@ import EmptyBar from "shared/Table/tableEmptyState";
 import TableLoading from "shared/tableLoading";
 import AddMember from "./components/AddMember";
 import { TeamPagePath } from "@constants/path";
+import AssignMemberToTask from "./components/AssignMemberToTask";
 
 const Members = () => {
   const { teamId } = useParams();
   const [openDrawer, setOpenDrawer] = useState(false);
-  const navigate = useNavigate()
+  const [memberData, setMemberData] = useState<IMembers>();
+  const [openAssignTask, setOpenAssignTask] = useState(false);
+  const navigate = useNavigate();
   const { data, isFetching } = useGetTeamMembersQuery(teamId as string);
-  
 
   const tableHead: ITableHead<IMembers>[] = [
     {
@@ -38,6 +40,17 @@ const Members = () => {
       },
     },
   ];
+
+  const menu = [
+    {
+      menuTitle: "Assign Task",
+      action: (data: IMembers) => {
+        console.log(data);
+        setMemberData(data);
+        setOpenAssignTask(true);
+      },
+    },
+  ];
   return (
     <>
       <div className="grid gap-y-4">
@@ -49,14 +62,22 @@ const Members = () => {
           tableHeads={tableHead}
           dataTableSource={data?.data?.members || []}
           onRowClick={({ _id }) => {
-            navigate(TeamPagePath.teamMemberDetails(teamId as string, _id))
+            navigate(TeamPagePath.teamMemberDetails(teamId as string, _id));
           }}
           loading={isFetching}
+          menuOptions={menu}
+          showMenu
           tableLoader={<TableLoading title=" Loading Members" />}
           tableEmptyState={<EmptyBar componentType="member" />}
         />
       </div>
       {openDrawer && <AddMember onClose={() => setOpenDrawer(false)} />}
+      {openAssignTask && (
+        <AssignMemberToTask
+          onClose={() => setOpenAssignTask(false)}
+          memberData={memberData as IMembers}
+        />
+      )}
     </>
   );
 };
