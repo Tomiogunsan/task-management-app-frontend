@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { useGetAllProjectTaskQuery } from "@services/project.service";
 import { ITask } from "@services/interfaces/response/project";
 import { ITableHead } from "shared/Table/interface";
-import {  formatDate } from "@utils/constant";
+import { formatDate } from "@utils/constant";
 import TableLoading from "shared/tableLoading";
 import EditTask from "./components/EditTask";
 import DeleteTask from "./components/DeleteTask";
@@ -20,7 +20,9 @@ const Task = () => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [task, setTask] = useState<ITask>();
-  const { data, isFetching } = useGetAllProjectTaskQuery(projectId as string);
+  const { data, isFetching } = useGetAllProjectTaskQuery({
+    id: projectId as string,
+  });
 
   const tableHead: ITableHead<ITask>[] = [
     {

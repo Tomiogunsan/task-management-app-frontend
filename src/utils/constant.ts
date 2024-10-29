@@ -1,4 +1,5 @@
-import {format} from 'date-fns'
+import { format } from "date-fns";
+import { IStatusType } from "shared/StatusBadge";
 
 export const formatDate = ({
   date,
@@ -15,16 +16,29 @@ export const formatDate = ({
   }
 };
 
-
 export const capitalize = (text: string | number | undefined) => {
-  if (text === null || typeof text !== 'string') return;
+  if (text === null || typeof text !== "string") return;
 
-  const words = text.includes('_') ? text.split('_') : text.split(' ');
+  const words = text.includes("_") ? text.split("_") : text.split(" ");
 
-  const output = words.map(word => {
+  const output = words.map((word) => {
     const capitalizedWord =
       word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase();
     return capitalizedWord;
   });
-  return output.join(' ');
+  return output.join(" ");
+};
+
+export const getClass = (text: IStatusType) => {
+  const defaultClassName = "py-[5px] px-[12px] font-[400] rounded-lg";
+  switch (text) {
+    case "completed":
+      return `${defaultClassName} bg-[#DAFBEC] text-[#052E16]`;
+
+    case "pending":
+      return `${defaultClassName} bg-[#FCD9DC] text-[#720B18]`;
+
+    case "in-progress":
+      return `${defaultClassName} bg-[#cccdff] text-[#0800ff]`;
+  }
 };

@@ -24,11 +24,11 @@ export const AuthPagePath = {
 export const TeamPagePath = {
   teamDetails: (teamId: string, fullPath: boolean = true) =>
     `${UsersPath.TEAM(fullPath)}/${teamId}`,
-  teamMemberDetails: (
-    teamId: string,
-    memberId: string,
-    fullPath: boolean = true
-  ) => `${TeamPagePath.teamDetails(teamId, fullPath)}/members/${memberId}`,
+  // teamMemberDetails: (
+  //   teamId: string,
+  //   memberId: string,
+  //   fullPath: boolean = true
+  // ) => `${TeamPagePath.teamDetails(teamId, fullPath)}/members/${memberId}`,
 };
 
 export const ProjectPagePath = {

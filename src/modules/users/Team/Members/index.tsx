@@ -2,22 +2,24 @@ import { IMembers } from "@services/interfaces/response/team";
 import { useGetTeamMembersQuery } from "@services/team.service";
 import { capitalize, formatDate } from "@utils/constant";
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import PageHeader from "shared/PageHeader";
 import Table from "shared/Table";
 import { ITableHead } from "shared/Table/interface";
 import EmptyBar from "shared/Table/tableEmptyState";
 import TableLoading from "shared/tableLoading";
 import AddMember from "./components/AddMember";
-import { TeamPagePath } from "@constants/path";
+
 import AssignMemberToTask from "./components/AssignMemberToTask";
+import MemberTask from "./MemberTask";
 
 const Members = () => {
   const { teamId } = useParams();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [memberData, setMemberData] = useState<IMembers>();
   const [openAssignTask, setOpenAssignTask] = useState(false);
-  const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(false);
+
   const { data, isFetching } = useGetTeamMembersQuery(teamId as string);
 
   const tableHead: ITableHead<IMembers>[] = [
@@ -45,7 +47,6 @@ const Members = () => {
     {
       menuTitle: "Assign Task",
       action: (data: IMembers) => {
-        console.log(data);
         setMemberData(data);
         setOpenAssignTask(true);
       },
@@ -61,8 +62,9 @@ const Members = () => {
         <Table<IMembers>
           tableHeads={tableHead}
           dataTableSource={data?.data?.members || []}
-          onRowClick={({ _id }) => {
-            navigate(TeamPagePath.teamMemberDetails(teamId as string, _id));
+          onRowClick={(data) => {
+            setMemberData(data);
+            setOpenModal(true);
           }}
           loading={isFetching}
           menuOptions={menu}
@@ -75,6 +77,12 @@ const Members = () => {
       {openAssignTask && (
         <AssignMemberToTask
           onClose={() => setOpenAssignTask(false)}
+          memberData={memberData as IMembers}
+        />
+      )}
+      {openModal && (
+        <MemberTask
+          onClose={() => setOpenModal(false)}
           memberData={memberData as IMembers}
         />
       )}

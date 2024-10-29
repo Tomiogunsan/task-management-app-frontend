@@ -22,7 +22,9 @@ import {
   ICreateProjectTaskQuery,
   IDeleteTaskQuery,
   IEditTaskQuery,
+  IGetAllProjectTaskQuery,
 } from "./interfaces/DTO/project";
+import { queryParamsHelper } from "config/query-params";
 
 export const projectApi = configuredApi
   .enhanceEndpoints({
@@ -71,10 +73,15 @@ export const projectApi = configuredApi
         }),
         invalidatesTags: ["allProjects"],
       }),
-      getAllProjectTask: build.query<IGetAllProjectTask, string>({
-        query: (id) => ({
+      getAllProjectTask: build.query<
+        IGetAllProjectTask,
+        IGetAllProjectTaskQuery
+      >({
+        query: (data) => ({
           method: "GET",
-          url: GET_ALL_PROJECT_TASK(id),
+          url: `${GET_ALL_PROJECT_TASK(data?.id as string)}${queryParamsHelper({
+            assignedUser: data.assignedUser,
+          })}`,
           version: "v1",
         }),
         providesTags: ["allTasks"],

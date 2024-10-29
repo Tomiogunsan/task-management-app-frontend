@@ -18,3 +18,8 @@ export type IEditTaskQuery = {
   projectId: string;
   taskId: string;
 } & ICreateProjectQuery;
+
+export type IGetAllProjectTaskQuery = {
+  id: string;
+  assignedUser?: string;
+};
