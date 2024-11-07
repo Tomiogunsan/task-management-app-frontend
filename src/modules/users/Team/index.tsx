@@ -11,6 +11,7 @@ import TableLoading from "shared/tableLoading";
 import AddTeam from "./components/AddTeam";
 import { capitalize, formatDate } from "@utils/constant";
 import AssignTeamProject from "./components/AssignTeamProject";
+import EmptyBar from "shared/Table/tableEmptyState";
 
 const Team = () => {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ const Team = () => {
       label: "Project",
       accessor: "projects",
       render: ({ projects }) => {
-        return projects?.name || "--";
+        return projects?.map((item) => item.name) || "--";
       },
     },
     {
@@ -73,6 +74,7 @@ const Team = () => {
           showMenu
           menuOptions={menu}
           tableLoader={<TableLoading title=" Loading Teams" />}
+          tableEmptyState={<EmptyBar componentType="team" />}
         />
       </div>
       {openDrawer && <AddTeam onClose={() => setOpenDrawer(false)} />}

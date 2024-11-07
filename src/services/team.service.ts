@@ -3,22 +3,25 @@ import {
   ADD_MEMBER_TO_TEAM,
   ADD_TEAM,
   ASSIGN_PROJECT_TO_TEAM,
-  ASSIGN_TASK_TO_MEMBER,
   GET_ALL_TEAM,
+  GET_MEMBER_DETAILS,
   GET_TEAM_MEMBERS,
+  UPDATE_STATUS,
 } from "config/apiUrl";
 import {
   IAddMemberResponse,
   IAssignProjectResponse,
-  IAssignTaskToMemberResponse,
+  IGetMemberDetailsResponse,
   IGetMembersResponse,
   IGetTeamResponse,
+  
+  IUpdateMemberTaskResponse,
 } from "./interfaces/response/team";
-import { IAddTeamQuery, IAssignTaskToMemberQuery } from "./interfaces/DTO/team";
+import { IAddTeamQuery, IGetMemberDetailsQuery, IUpdateMemberTaskQuery } from "./interfaces/DTO/team";
 
 export const teamApi = configuredApi
   .enhanceEndpoints({
-    addTagTypes: ["allTeams", "allMembers"],
+    addTagTypes: ["allTeams", "allMembers", "individualMembers"],
   })
   .injectEndpoints({
     overrideExisting: true,
@@ -76,19 +79,27 @@ export const teamApi = configuredApi
         }),
         invalidatesTags: ["allMembers"],
       }),
-      assignTaskToMember: build.mutation<
-        IAssignTaskToMemberResponse,
-        IAssignTaskToMemberQuery
+      getMemberDetail: build.query<
+        IGetMemberDetailsResponse,
+        IGetMemberDetailsQuery
+      >({
+        query: (data) => ({
+          method: "GET",
+          url: GET_MEMBER_DETAILS(data.teamId, data.memberId),
+          version: "v1",
+        }),
+        providesTags: ["individualMembers"],
+      }),
+      updateMemberTask: build.mutation<
+        IUpdateMemberTaskResponse,
+        IUpdateMemberTaskQuery
       >({
         query: (data) => ({
           method: "PATCH",
-          url: ASSIGN_TASK_TO_MEMBER(data.projectId, data.taskId),
+          url: UPDATE_STATUS(data.projectId, data.taskId),
           version: "v1",
-          data: {
-            userId: data.userId,
-          },
         }),
-        invalidatesTags: ["allMembers"],
+        invalidatesTags: ["individualMembers"],
       }),
     }),
   });
@@ -99,5 +110,6 @@ export const {
   useAddTeamMutation,
   useGetTeamMembersQuery,
   useAddMemberToTeamMutation,
-  useAssignTaskToMemberMutation
+  useGetMemberDetailQuery,
+  useUpdateMemberTaskMutation
 } = teamApi;

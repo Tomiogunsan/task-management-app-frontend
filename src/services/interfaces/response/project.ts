@@ -33,9 +33,11 @@ export type ITaskProject = {
   name: string;
 };
 
+export type IAssignedUser = { _id: string; name: string };
+
 export type ITask = {
   status: string;
-  assignedUser: { _id: string; name: string };
+  assignedUser: IAssignedUser[];
   project: ITaskProject[];
   _id: string;
   name: string;
@@ -68,3 +70,15 @@ export type IDeleteTaskResponse = {
   message: string;
 };
 
+export type IAssignTaskResponse = {
+  status: string;
+  message: string;
+  data: {
+    task: ITask;
+  };
+};
+
+export type IAssignTaskToMemberErrorResponse = {
+  status: string;
+  message: string;
+};

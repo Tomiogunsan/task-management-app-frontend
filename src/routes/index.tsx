@@ -5,12 +5,13 @@ import { ProjectPagePath, TeamPagePath, UsersPath } from "@constants/path";
 import Members from "@modules/users/Team/Members";
 
 import Task from "@modules/users/Project/Task";
+import MemberTask from "@modules/users/Team/Members/MemberTask";
 
 const Team = lazy(() => import("modules/users/Team"));
 const Project = lazy(() => import("modules/users/Project"));
 
 const UsersRouter: React.FC = () => {
-  console.log(TeamPagePath.teamDetails(":teamId"));
+ 
   return (
     <Routes>
       <Route element={<Users />}>
@@ -23,6 +24,7 @@ const UsersRouter: React.FC = () => {
           path={TeamPagePath.teamDetails(":teamId", false)}
           element={<Members />}
         />
+        <Route path={TeamPagePath.teamMemberDetails(":teamId", ":memberId", false)} element={<MemberTask />} />
 
         <Route path={UsersPath.PROJECT(false)} element={<Project />} />
         <Route

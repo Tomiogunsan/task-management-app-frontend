@@ -1,30 +1,45 @@
-import { ITask } from "@services/interfaces/response/project";
-import { IMembers } from "@services/interfaces/response/team";
-import { useGetAllProjectTaskQuery } from "@services/project.service";
-import { formatDate } from "@utils/constant";
+import { IMemberTask } from "@services/interfaces/response/team";
 
-import Modal from "shared/Modal";
+import { useGetMemberDetailQuery } from "@services/team.service";
+
+import { formatDate } from "@utils/constant";
+import { capitalize } from "lodash";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import PageHeader from "shared/PageHeader";
+
 import StatusBadge, { IStatusType } from "shared/StatusBadge";
 
 import Table from "shared/Table";
 import { ITableHead } from "shared/Table/interface";
 import EmptyBar from "shared/Table/tableEmptyState";
 import TableLoading from "shared/tableLoading";
+import UpdateMemberTask from "./components/UpdateMemberTask";
 
-type Props = {
-  onClose: () => void;
-  memberData: IMembers;
-};
-const MemberTask = ({ onClose, memberData }: Props) => {
-  const { data, isFetching } = useGetAllProjectTaskQuery({
-    id: memberData?.projects?._id as string,
-    assignedUser: memberData?._id,
+const MemberTask = () => {
+  const { teamId, memberId } = useParams();
+  const [updateTaskModal, setUpdateTaskModal] = useState(false);
+  const [task, setTask] = useState<IMemberTask>();
+
+  const { data, isFetching } = useGetMemberDetailQuery({
+    teamId: teamId as string,
+    memberId: memberId as string,
   });
 
-  const tableHead: ITableHead<ITask>[] = [
+  const tableHead: ITableHead<IMemberTask>[] = [
+    {
+      label: "Name",
+      accessor: "name",
+      render: ({ name }) => {
+        return capitalize(name);
+      },
+    },
     {
       label: "Description",
       accessor: "description",
+      render: ({ description }) => {
+        return capitalize(description);
+      },
     },
     {
       label: "Date Created",
@@ -46,21 +61,20 @@ const MemberTask = ({ onClose, memberData }: Props) => {
   const menu = [
     {
       menuTitle: "Update status",
-      action: () => {},
+      action: (data: IMemberTask) => {
+        setUpdateTaskModal(true);
+        setTask(data);
+      },
     },
   ];
 
   return (
-    <Modal
-      onClose={onClose}
-      header="Member Task"
-      action={{ show: false }}
-      containerClassName="max-w-max w-full"
-    >
+    <>
       <div className="grid gap-y-4 ">
+        <PageHeader title="Member Task" />
         <Table
           tableHeads={tableHead}
-          dataTableSource={data?.data?.tasks || []}
+          dataTableSource={data?.data?.member?.tasks || []}
           loading={isFetching}
           showMenu
           menuOptions={menu}
@@ -68,7 +82,13 @@ const MemberTask = ({ onClose, memberData }: Props) => {
           tableEmptyState={<EmptyBar componentType="task" />}
         />
       </div>
-    </Modal>
+      {updateTaskModal && (
+        <UpdateMemberTask
+          onClose={() => setUpdateTaskModal(false)}
+          task={task as IMemberTask}
+        />
+      )}
+    </>
   );
 };
 

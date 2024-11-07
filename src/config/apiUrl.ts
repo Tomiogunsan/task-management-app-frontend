@@ -19,3 +19,5 @@ export const EDIT_TASK = (projectId: string, taskId: string) =>
   `project/${projectId}/task/${taskId}`;
 export const ASSIGN_TASK_TO_MEMBER = (projectId: string, taskId: string) =>
   `project/${projectId}/task/${taskId}/assign`;
+export const GET_MEMBER_DETAILS = (teamId: string, memberId: string) => `team/${teamId}/member/${memberId}`;
+export const UPDATE_STATUS = (projectId: string, taskId: string) =>  `project/${projectId}/task/${taskId}/status`

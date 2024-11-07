@@ -14,6 +14,8 @@ import DeleteProject from "./components/DeleteProject";
 import AssignProject from "./components/AssignProject";
 import { useNavigate } from "react-router-dom";
 import { ProjectPagePath } from "@constants/path";
+import EmptyBar from "shared/Table/tableEmptyState";
+import { capitalize } from "lodash";
 
 const Project = () => {
   const navigate = useNavigate();
@@ -28,10 +30,16 @@ const Project = () => {
     {
       label: "Name",
       accessor: "name",
+      render: ({ name }) => {
+        return capitalize(name);
+      },
     },
     {
       label: "Description",
       accessor: "description",
+      render: ({ description }) => {
+        return capitalize(description);
+      },
     },
     {
       label: "Date Created",
@@ -85,6 +93,7 @@ const Project = () => {
           navigate(ProjectPagePath.projectDetails(_id));
         }}
         tableLoader={<TableLoading title=" Loading Project" />}
+        tableEmptyState={<EmptyBar componentType="project" />}
       />
       {openDrawer && <CreateProject onClose={() => setOpenDrawer(false)} />}
       {editModal && (

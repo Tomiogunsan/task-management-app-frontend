@@ -2,7 +2,7 @@ import { IMembers } from "@services/interfaces/response/team";
 import { useGetTeamMembersQuery } from "@services/team.service";
 import { capitalize, formatDate } from "@utils/constant";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PageHeader from "shared/PageHeader";
 import Table from "shared/Table";
 import { ITableHead } from "shared/Table/interface";
@@ -11,14 +11,14 @@ import TableLoading from "shared/tableLoading";
 import AddMember from "./components/AddMember";
 
 import AssignMemberToTask from "./components/AssignMemberToTask";
-import MemberTask from "./MemberTask";
+import { TeamPagePath } from "@constants/path";
 
 const Members = () => {
+  const navigate = useNavigate()
   const { teamId } = useParams();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [memberData, setMemberData] = useState<IMembers>();
   const [openAssignTask, setOpenAssignTask] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
 
   const { data, isFetching } = useGetTeamMembersQuery(teamId as string);
 
@@ -62,9 +62,8 @@ const Members = () => {
         <Table<IMembers>
           tableHeads={tableHead}
           dataTableSource={data?.data?.members || []}
-          onRowClick={(data) => {
-            setMemberData(data);
-            setOpenModal(true);
+          onRowClick={({_id: id}) => {
+            navigate(TeamPagePath.teamMemberDetails(teamId as string, id))
           }}
           loading={isFetching}
           menuOptions={menu}
@@ -77,12 +76,6 @@ const Members = () => {
       {openAssignTask && (
         <AssignMemberToTask
           onClose={() => setOpenAssignTask(false)}
-          memberData={memberData as IMembers}
-        />
-      )}
-      {openModal && (
-        <MemberTask
-          onClose={() => setOpenModal(false)}
           memberData={memberData as IMembers}
         />
       )}

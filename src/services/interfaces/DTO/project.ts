@@ -23,3 +23,10 @@ export type IGetAllProjectTaskQuery = {
   id: string;
   assignedUser?: string;
 };
+
+
+export type IAssignTaskQuery = {
+  projectId: string;
+  taskId: string;
+  userId: string;
+};

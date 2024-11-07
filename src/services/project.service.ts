@@ -1,5 +1,6 @@
 import { configuredApi } from "@constants/createApi-common";
 import {
+  ASSIGN_TASK_TO_MEMBER,
   CREATE_PROJECT,
   CREATE_PROJECT_TASK,
   DELETE_PROJECT,
@@ -10,6 +11,7 @@ import {
   GET_ALL_PROJECT_TASK,
 } from "config/apiUrl";
 import {
+  IAssignTaskResponse,
   ICreateProjectResponse,
   ICreateProjectTaskResponse,
   IDeleteProjectResponse,
@@ -18,6 +20,7 @@ import {
   IGetProjectResponse,
 } from "./interfaces/response/project";
 import {
+  IAssignTaskQuery,
   ICreateProjectQuery,
   ICreateProjectTaskQuery,
   IDeleteTaskQuery,
@@ -79,7 +82,7 @@ export const projectApi = configuredApi
       >({
         query: (data) => ({
           method: "GET",
-          url: `${GET_ALL_PROJECT_TASK(data?.id as string)}${queryParamsHelper({
+          url: `${GET_ALL_PROJECT_TASK(data.id as string)}${queryParamsHelper({
             assignedUser: data.assignedUser,
           })}`,
           version: "v1",
@@ -115,6 +118,17 @@ export const projectApi = configuredApi
         }),
         invalidatesTags: ["allTasks"],
       }),
+      assignTask: build.mutation<IAssignTaskResponse, IAssignTaskQuery>({
+        query: (data) => ({
+          method: "PATCH",
+          url: ASSIGN_TASK_TO_MEMBER(data.projectId, data.taskId),
+          version: "v1",
+          data: {
+            userId: data.userId,
+          },
+        }),
+        invalidatesTags: ["allTasks", "allProjects"],
+      }),
     }),
   });
 
@@ -127,4 +141,5 @@ export const {
   useCreateProjectTaskMutation,
   useDeleteTaskMutation,
   useEditTaskMutation,
+  useAssignTaskMutation,
 } = projectApi;

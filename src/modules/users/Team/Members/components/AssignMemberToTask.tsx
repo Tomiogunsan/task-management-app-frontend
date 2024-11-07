@@ -1,9 +1,10 @@
+import { IAssignTaskToMemberErrorResponse } from "@services/interfaces/response/project";
+import { IMembers } from "@services/interfaces/response/team";
 import {
-  IAssignTaskToMemberErrorResponse,
-  IMembers,
-} from "@services/interfaces/response/team";
-import { useGetAllProjectTaskQuery } from "@services/project.service";
-import { useAssignTaskToMemberMutation } from "@services/team.service";
+  useAssignTaskMutation,
+  useGetAllProjectTaskQuery,
+} from "@services/project.service";
+
 import { toastAlert } from "@utils/toastConfig";
 import { useForm } from "react-hook-form";
 import Button from "shared/Button";
@@ -22,16 +23,17 @@ const AssignMemberToTask = ({ onClose, memberData }: Props) => {
       task: "",
     },
   });
+  const projectId = memberData?.projects?.map((item) => item._id).toString();
 
-  const [assignTaskToMember, { isLoading }] = useAssignTaskToMemberMutation();
-  const { data, isFetching } = useGetAllProjectTaskQuery(
-    memberData?.projects?._id as string
-  );
+  const [assignTaskToMember, { isLoading }] = useAssignTaskMutation();
+  const { data, isFetching } = useGetAllProjectTaskQuery({
+    id: projectId,
+  });
 
   const handleAssignTask = async (data: { task: string }) => {
     try {
       const payload = {
-        projectId: memberData?.projects?._id as string,
+        projectId,
         taskId: data.task,
         userId: memberData?._id as string,
       };
@@ -41,7 +43,7 @@ const AssignMemberToTask = ({ onClose, memberData }: Props) => {
       toastAlert.success("Task assigned successfully");
     } catch (error) {
       const { message } = error as IAssignTaskToMemberErrorResponse;
-        onClose();
+      onClose();
       toastAlert.error(message || "Something went wrong");
     }
   };

@@ -13,6 +13,7 @@ import TableLoading from "shared/tableLoading";
 import EditTask from "./components/EditTask";
 import DeleteTask from "./components/DeleteTask";
 import { capitalize } from "lodash";
+import StatusBadge, { IStatusType } from "shared/StatusBadge";
 
 const Task = () => {
   const { projectId } = useParams();
@@ -44,7 +45,9 @@ const Task = () => {
       label: "Assigned To",
       accessor: "assignedUser",
       render: ({ assignedUser }) => {
-        return capitalize(assignedUser?.name || "--");
+        return capitalize(
+          assignedUser?.map((item) => item?.name).toString() || "--"
+        );
       },
     },
     {
@@ -59,6 +62,9 @@ const Task = () => {
     {
       label: "Status",
       accessor: "status",
+      render: ({ status }) => {
+        return <StatusBadge status={status as IStatusType} />;
+      },
     },
   ];
 

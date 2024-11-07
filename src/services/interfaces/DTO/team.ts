@@ -3,8 +3,12 @@ export type IAddTeamQuery = {
   description: string;
 };
 
-export type IAssignTaskToMemberQuery = {
+export type IGetMemberDetailsQuery = {
+  teamId: string;
+  memberId: string;
+};
+
+export type IUpdateMemberTaskQuery = {
   projectId: string;
   taskId: string;
-  userId: string;
 };

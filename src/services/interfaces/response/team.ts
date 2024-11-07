@@ -1,11 +1,11 @@
-import { ITask } from "./project";
+export type IProject = {
+  _id: string;
+  name: string;
+};
 
 export type ITeams = {
   members: string[];
-  projects: {
-    _id: string;
-    name: string;
-  };
+  projects: IProject[];
 
   _id: string;
   name: string;
@@ -25,10 +25,8 @@ export type IMembers = {
     emailNotifications: boolean;
   };
   role: string;
-  projects: {
-    _id: string;
-    name: string;
-  };
+  projects: IProject[];
+  tasks: [];
   teams: [];
   _id: string;
   name: string;
@@ -67,15 +65,43 @@ export type IAssignProjectResponse = {
   };
 };
 
-export type IAssignTaskToMemberResponse = {
+export type IMemberTask = {
   status: string;
-  message: string;
+  _id: string;
+  name: string;
+  description: string;
+  dateCreated: string;
+  project: IProject[];
+};
+
+export type IGetMemberDetailsResponse = {
+  status: string;
   data: {
-    task: ITask;
+    member: {
+      notificationPreferences: {
+        emailNotifications: boolean;
+      };
+      role: string;
+      projects: string[];
+      tasks: IMemberTask[];
+      teams: [];
+      _id: string;
+      name: string;
+      email: string;
+      createdAt: string;
+      __v: 3;
+    };
   };
 };
 
-export type IAssignTaskToMemberErrorResponse = {
+
+
+export type IUpdateMemberTaskResponse = {
+  status: string;
+  message: string;
+};
+
+export type IUpdateMemberTaskErrorResponse = {
   status: string;
   message: string;
 };
