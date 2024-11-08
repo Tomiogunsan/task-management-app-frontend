@@ -1,6 +1,5 @@
 import { configuredApi } from "@constants/createApi-common";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-// import { authApi } from '@services/auth.service';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 const configureStoreWithMiddleWare = (initialState: {}) => {

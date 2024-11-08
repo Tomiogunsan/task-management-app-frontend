@@ -1,6 +1,6 @@
 import { IModalProps } from './interface';
 import { twMerge } from 'tailwind-merge';
-// import ModalBoxLayout from 'shared/ModalBoxLayout';
+
 import { RxCross2 } from "react-icons/rx";
 import Button from 'shared/Button';
 

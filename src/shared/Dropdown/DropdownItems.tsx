@@ -34,6 +34,7 @@ const DropdownItems = ({
                 if (item.onClick) {
                   item.onClick(close);
                   // Close the dropdown menu if closeOnItemClick is true
+                  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
                   closeOnItemClick && close();
                 } else {
                   close();

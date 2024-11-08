@@ -7,6 +7,7 @@ export type IModalActionProps = {
   text?: React.ReactNode;
   variant?: IButtonProps['variant'];
   color?: IButtonProps['color'];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onClick?: (_data: any) => void;
   disabled?: boolean;
   className?: string;

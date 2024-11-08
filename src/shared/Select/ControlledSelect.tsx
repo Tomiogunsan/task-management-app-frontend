@@ -10,7 +10,7 @@ const ControlledSelect = <TFieldValue extends FieldValues>(
     <Controller
       control={control}
       name={cname}
-      render={({ field: { ref: _ref, ...fields }, fieldState }) => (
+      render={({ field: {  ...fields }, fieldState }) => (
         <Select
           {...fields}
           {...rest}

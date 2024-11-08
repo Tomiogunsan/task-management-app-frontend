@@ -1,10 +1,13 @@
-import { SelectProps } from '@mui/material';
-import React from 'react';
-import { FieldValues } from 'react-hook-form';
-import { IFieldHelperTextProps } from 'shared/FieldHelperText/interface';
-import { IFieldLabelHelperTextProps } from 'shared/FieldLabelHelperText/interface';
-import { IBaseControlledField } from 'shared/interface';
+import { SelectProps } from "@mui/material";
+import React from "react";
+import { Control, FieldErrorsImpl, FieldValues, Path } from "react-hook-form";
+import { IFieldHelperTextProps } from "shared/FieldHelperText/interface";
 
+export interface IBaseControlledField<TFieldValues extends FieldValues> {
+  name: Path<TFieldValues>;
+  control: Control<TFieldValues>;
+  errors?: Partial<FieldErrorsImpl<TFieldValues>>;
+}
 export type ISelectOption = {
   label: string;
   value: string | number;
@@ -17,7 +20,7 @@ export type ISelectOption = {
 
 export type ISelectProps = Omit<
   SelectProps,
-  'onChange' | 'placeholder' | 'renderValue'
+  "onChange" | "placeholder" | "renderValue"
 > &
   IFieldHelperTextProps & {
     label?: string;
@@ -25,14 +28,14 @@ export type ISelectProps = Omit<
     containerClassName?: string;
     labelClassName?: string;
     labelEndAdornment?: React.ReactNode;
-    labelHelperTextProps?: Omit<IFieldLabelHelperTextProps, 'children'>;
+
     labelHelperText?: React.ReactNode;
     actionText?: React.ReactNode;
     options: ISelectOption[];
     StartIconComponent?: React.ElementType;
     onChange?: (
       // eslint-disable-next-line no-unused-vars
-      value: ISelectOption['value'] | ISelectOption['value'][],
+      value: ISelectOption["value"] | ISelectOption["value"][]
     ) => void;
     showSelectAll?: boolean;
     showChipPreview?: boolean;
@@ -51,7 +54,7 @@ export type ISelectProps = Omit<
       // eslint-disable-next-line no-unused-vars
       selected: unknown,
       // eslint-disable-next-line no-unused-vars
-      options: ISelectOption | Record<string, ISelectOption>,
+      options: ISelectOption | Record<string, ISelectOption>
     ) => React.ReactNode | string | number;
     renderedValueClassName?: string;
     previewMode?: boolean;
@@ -59,4 +62,4 @@ export type ISelectProps = Omit<
 
 export type IControlledSelect<TFieldValues extends FieldValues> =
   IBaseControlledField<TFieldValues> &
-    Omit<ISelectProps, 'value' | 'name' | 'onChange'>;
+    Omit<ISelectProps, "value" | "name" | "onChange">;

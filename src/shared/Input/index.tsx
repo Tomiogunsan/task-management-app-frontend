@@ -21,14 +21,7 @@ const Input = (props: IInputProps) => {
   return (
     <div className="w-full max-w-full overflow-hidden flex flex-col py-2">
       {label && <label className="pb-[3px] text-[#333333]">{label}</label>}
-      {/* {label && asteric ? (
-        <div className="flex items-center">
-          <label className='text-[13px] leading-5 text-[#333]'>{label}</label>
-          <img src={Asteric} alt='asteric' className="ml-[4px]" />
-        </div>
-      ) : (
-        <label className="pb-[3px] text-[#333333]">{label}</label>
-      )} */}
+
       <OutlinedInput
         {...rest}
         classes={{
@@ -52,11 +45,6 @@ const Input = (props: IInputProps) => {
           ) : null
         }
         inputProps={{ maxlength: maxlength }}
-        // inputRef={input => {
-        //   if (ref) {
-        //     ref(input);
-        //   }
-        // }}
       />
       <FieldHelperText error={props.error} helperText={helperText} />
     </div>
