@@ -36,7 +36,7 @@ const Login = () => {
 
       toastAlert.success("Logged in successfully");
       setToken(res.token);
-      navigate(UsersPath.TEAM(false));
+      navigate(UsersPath.TEAM());
     } catch (error) {
       const { message } = error as unknown as ILoginErrorResponse;
       toastAlert.error(message || "Incorrect email or password");
