@@ -15,7 +15,7 @@ const TableLoading = ({
         className
       )}
     >
-      <CircularProgress size={40} className="bg-blue-700 rounded-lg" />
+      <CircularProgress size={40} className="bg-[#ff8600] rounded-lg" />
       <p className="mt-[25px]">{title}</p>
     </div>
   );

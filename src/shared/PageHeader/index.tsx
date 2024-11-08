@@ -49,7 +49,9 @@ export default function PageHeader({
             </div>
 
             {actions && (
-              <div className="grid grid-flow-col gap-3 bg-[#0e6ce0] text-[#fff] px-4 py-2 rounded-md cursor-pointer border shadow-md">
+              <div
+                className="grid grid-flow-col gap-3 bg-[#FF8600] text-[#fff] px-4 py-2 rounded-md cursor-pointer border shadow-md"
+              >
                 {actions}
               </div>
             )}

@@ -15,7 +15,7 @@ const Button = ({
       variant={variant}
       className={twMerge(
         className,
-        "!border capitalize font-[500] text-[16px] leading-5 py-[10px] rounded-[8px] hover:bg-[#2809c3]"
+        "!border capitalize font-[500] text-[16px] leading-5 py-[10px] rounded-[8px] bg-[#FF8600] hover:bg-[#e38d2b]"
       )}
       {...rest}
       color={color}
