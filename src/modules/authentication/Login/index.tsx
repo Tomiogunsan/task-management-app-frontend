@@ -8,7 +8,7 @@ import { ILoginSchemaProps } from "../validation/validationInterfaces";
 import { loginSchema } from "../validation";
 import { useLoginMutation } from "@services/auth.service";
 
-import { AuthPaths, BasePaths } from "@constants/path";
+import { AuthPaths, UsersPath } from "@constants/path";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ILoginErrorResponse,
@@ -36,7 +36,7 @@ const Login = () => {
 
       toastAlert.success("Logged in successfully");
       setToken(res.token);
-      navigate(BasePaths.USER());
+      navigate(UsersPath.TEAM(false));
     } catch (error) {
       const { message } = error as unknown as ILoginErrorResponse;
       toastAlert.error(message || "Incorrect email or password");
