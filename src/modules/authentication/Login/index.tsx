@@ -71,7 +71,7 @@ const Login = () => {
         </Button>
         <p className="pt-4 text-center text-gray-400">
           Not registered yet?{" "}
-          <span className="text-blue-700 font-bold">
+          <span className="text-[#FF8600] font-bold">
             <Link to={`/${AuthPaths.REGISTER}`}>Register here</Link>
           </span>
         </p>

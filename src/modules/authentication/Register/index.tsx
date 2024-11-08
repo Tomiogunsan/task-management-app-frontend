@@ -46,15 +46,13 @@ const Register = () => {
       text={
         <p>
           Already registered?{" "}
-          <span className="text-blue-700 font-bold">
+          <span className="text-[#FF8600] font-bold">
             <Link to={`/${AuthPaths.SIGNIN}`}>Please Login</Link>
           </span>
         </p>
       }
     >
-      <form
-        onSubmit={handleSubmit(handleSubmitForm)}
-      >
+      <form onSubmit={handleSubmit(handleSubmitForm)}>
         <ControlledInput
           label="Enter your name"
           name="name"
