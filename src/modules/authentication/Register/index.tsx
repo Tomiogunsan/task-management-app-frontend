@@ -30,12 +30,9 @@ const Register = () => {
 
   const [register, { isLoading }] = useRegisterMutation();
   const handleSubmitForm = async (data: IRegisterDTO) => {
-    console.log(data);
     try {
-      const res = (await register(
-        data
-      ).unwrap()) as unknown as IRegisterResponse;
-      console.log(res);
+      (await register(data).unwrap()) as unknown as IRegisterResponse;
+
       toastAlert.success("Registered successfully");
       navigate(`/${AuthPaths.SIGNIN}`);
     } catch (error) {
@@ -49,14 +46,14 @@ const Register = () => {
       text={
         <p>
           Already registered?{" "}
-          <span className='text-blue-700 font-bold'>
+          <span className="text-blue-700 font-bold">
             <Link to={`/${AuthPaths.SIGNIN}`}>Please Login</Link>
           </span>
         </p>
       }
     >
       <form
-        onSubmit={handleSubmit(handleSubmitForm, (err) => console.log(err))}
+        onSubmit={handleSubmit(handleSubmitForm)}
       >
         <ControlledInput
           label="Enter your name"

@@ -31,15 +31,13 @@ const Login = () => {
 
   const [login, { isLoading }] = useLoginMutation();
   const handleSubmitForm = async (data: ILoginSchemaProps) => {
-    console.log(data);
     try {
       const res = (await login(data).unwrap()) as unknown as ILoginResponse;
-    
+
       toastAlert.success("Logged in successfully");
       setToken(res.token);
-      navigate(BasePaths.USER);
+      navigate(BasePaths.USER());
     } catch (error) {
-      console.log(error);
       const { message } = error as unknown as ILoginErrorResponse;
       toastAlert.error(message || "Incorrect email or password");
     }
@@ -50,9 +48,7 @@ const Login = () => {
       label="Log in to your account "
       text={<p>Welcome back! Please enter your details</p>}
     >
-      <form
-        onSubmit={handleSubmit(handleSubmitForm, (err) => console.log(err))}
-      >
+      <form onSubmit={handleSubmit(handleSubmitForm)}>
         <ControlledInput
           label="Enter your email"
           name="email"
