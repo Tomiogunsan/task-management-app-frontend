@@ -4,7 +4,7 @@ import { LiaProjectDiagramSolid } from "react-icons/lia";
 import { RiTeamFill } from "react-icons/ri";
 import { twMerge } from "tailwind-merge";
 import { AuthPagePath, UsersPath } from "@constants/path";
-
+import { GrUserAdmin } from "react-icons/gr";
 import { logOut } from "helpers/auth";
 
 const USER_SIDENAV = [
@@ -100,7 +100,9 @@ const SideNav = () => {
 
       <div className="flex flex-col py-8 mt-auto w-[232px]  pl-8">
         <div className="flex flex-col items-center justify-center bg-[#fff] rounded-[12px] shadow-md px-4 pb-4 gap-[6px]">
-          <div className="w-[60px] h-[60px] rounded-full bg-slate-200" />
+          <div className="w-[60px] h-[60px] rounded-full bg-slate-200 relative">
+            <GrUserAdmin className="text-[#818187] absolute left-[40%]  top-[40%]" />
+          </div>
           <h3 className="text-[18px] font-[500] leading-6 text-[#3B3B45]">
             Theresa milly
           </h3>
