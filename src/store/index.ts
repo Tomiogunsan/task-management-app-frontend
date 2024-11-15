@@ -10,10 +10,12 @@ const configureStoreWithMiddleWare = (initialState: {}) => {
   });
   const store = configureStore({
     reducer: rootReducer,
+
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: false,
       }).concat([configuredApi.middleware]),
+
     preloadedState: initialState,
     devTools: import.meta.env.DEV,
   });

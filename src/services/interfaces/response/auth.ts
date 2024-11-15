@@ -1,3 +1,11 @@
+export type IUserDecoded = {
+  user: {
+    email: string;
+    name: string;
+    role: string;
+  };
+};
+
 export type IRegisterResponse = {
   status: string;
   message: string;

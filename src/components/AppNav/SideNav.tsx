@@ -5,7 +5,9 @@ import { RiTeamFill } from "react-icons/ri";
 import { twMerge } from "tailwind-merge";
 import { AuthPagePath, UsersPath } from "@constants/path";
 import { GrUserAdmin } from "react-icons/gr";
-import { logOut } from "helpers/auth";
+import { getDecodedJwt, logOut } from "helpers/auth";
+import { capitalize } from "lodash";
+import { FaMessage } from "react-icons/fa6";
 
 const USER_SIDENAV = [
   {
@@ -20,6 +22,12 @@ const USER_SIDENAV = [
     icon: <LiaProjectDiagramSolid />,
     iconWhite: <LiaProjectDiagramSolid />,
   },
+  {
+    name: 'Messages',
+    path: UsersPath.MESSAGES(),
+    icon: <FaMessage/>,
+    iconWhite: <FaMessage/>
+  }
 ];
 
 const SideNav = () => {
@@ -31,6 +39,9 @@ const SideNav = () => {
     logOut();
     navigate(AuthPagePath.signin(), { replace: true });
   };
+
+  const user = getDecodedJwt()
+  
 
   return (
     <div className="overflow-auto bg-[#F7F7F8] flex flex-col border-r-2 border-[#F7F7F8] text-[#000] font-[Inter] h-screen ">
@@ -104,10 +115,10 @@ const SideNav = () => {
             <GrUserAdmin className="text-[#818187] absolute left-[40%]  top-[40%]" />
           </div>
           <h3 className="text-[18px] font-[500] leading-6 text-[#3B3B45]">
-            Theresa milly
+            {capitalize(user?.user?.name)}
           </h3>
           <p className="text-[12px] leading-4 font-[400] text-[#818187]">
-            Influencer
+            {capitalize(user?.user?.role.replace('-', ' '))}
           </p>
           <div
             className="bg-[#FF860029] rounded-[12px] flex gap-2 items-center justify-center p-4 w-full cursor-pointer"

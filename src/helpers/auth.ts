@@ -1,5 +1,6 @@
 // import { IUserDecoded } from 'interfaces/auth.interface';
-// import jwtDecode from 'jwt-decode';
+ import { IUserDecoded } from '@services/interfaces/response/auth';
+import {jwtDecode } from 'jwt-decode';
 
 // type IUserDecoded = {
 //  [x: string]: string | number| Date | undefined
@@ -11,14 +12,15 @@ export const setToken = (token: string): void => {
 export const getToken = (): string => {
   return localStorage.getItem("accessToken") || "";
 };
-
-// export const getDecodedJwt = (token: string = getToken()): IUserDecoded => {
-//   try {
-//     return jwtDecode(token);
-//   } catch (error) {
-//     return {} as IUserDecoded;
-//   }
-// };
+// IUserDecoded 
+export const getDecodedJwt = (token: string = getToken()): IUserDecoded => {
+  try {
+    return jwtDecode(token);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
+    return {} as IUserDecoded ;
+  }
+};
 
 export const setRefreshToken = (refreshToken: string) => {
   localStorage.setItem("refreshToken", refreshToken);
