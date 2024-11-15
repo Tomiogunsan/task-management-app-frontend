@@ -10,7 +10,8 @@ export const BasePaths = {
 export const UsersPath = {
   TEAM: (fullPath: boolean = true) => `${BasePaths.USER(fullPath)}/team`,
   PROJECT: (fullPath: boolean = true) => `${BasePaths.USER(fullPath)}/project`,
-  MESSAGES: (fullPath: boolean = true) => `${BasePaths.USER(fullPath)}/messages`,
+  MESSAGES: (fullPath: boolean = true) =>
+    `${BasePaths.USER(fullPath)}/messages`,
 };
 
 export const AuthPagePath = {
@@ -35,4 +36,9 @@ export const TeamPagePath = {
 export const ProjectPagePath = {
   projectDetails: (projectId: string, fullPath: boolean = true) =>
     `${UsersPath.PROJECT(fullPath)}/${projectId}`,
+};
+
+export const MessagePagePath = {
+  teamMessages: (teamId: string, fullPath: boolean = true) =>
+    `${UsersPath.MESSAGES(fullPath)}/${teamId}`,
 };
