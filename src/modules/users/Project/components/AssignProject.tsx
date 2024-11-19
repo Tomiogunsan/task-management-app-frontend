@@ -17,7 +17,7 @@ type Props = {
 };
 
 const AssignProject = ({ onClose, projectData }: Props) => {
-  const { data, isFetching } = useGetTeamQuery(null);
+  const { data, isFetching } = useGetTeamQuery({ teamId: "" });
   const { control, handleSubmit } = useForm({
     defaultValues: {
       team: "",

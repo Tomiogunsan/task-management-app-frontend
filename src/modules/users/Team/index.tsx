@@ -47,7 +47,7 @@ const Team = () => {
       },
     },
   ];
-  const { data, isFetching } = useGetTeamQuery(null);
+  const { data, isFetching } = useGetTeamQuery({ teamId: "" });
 
   const menu = [
     {
