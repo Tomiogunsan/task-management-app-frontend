@@ -5,6 +5,7 @@ import { ITeams } from "@services/interfaces/response/team";
 import { capitalize } from "lodash";
 import {
 
+  useGetAllMessagesQuery,
   useSendMessageMutation,
 } from "@services/messages.service";
 import io , {Socket} from "socket.io-client";
@@ -25,19 +26,19 @@ const ChatSession = ({ selectedTeam }: Props) => {
 
   const currentUserId = user?.user?.id;
 
-  // const { data } = useGetAllMessagesQuery(teamId);
+   const { data } = useGetAllMessagesQuery(teamId);
   const [sendMessage] = useSendMessageMutation();
-  // const initialMessage = data?.data?.messages;
+ const initialMessage = data?.data?.messages;
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
 
-  // useEffect(() => {
-  //   if (initialMessage) {
-  //     setMessages(initialMessage);
-  //   }
-  // }, [initialMessage]);
+  useEffect(() => {
+    if (initialMessage) {
+      setMessages(initialMessage);
+    }
+  }, [initialMessage]);
 
   useEffect(() => {
     const newSocket = io(import.meta.env.VITE_API_BASE_URL, {
