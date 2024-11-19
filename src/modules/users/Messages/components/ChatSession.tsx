@@ -7,7 +7,7 @@ import {
   useGetAllMessagesQuery,
   useSendMessageMutation,
 } from "@services/messages.service";
-import io from "socket.io-client";
+import io , {Socket} from "socket.io-client";
 import { useEffect, useRef, useState } from "react";
 import { IMessage } from "@services/interfaces/response/message";
 import { getDecodedJwt } from "helpers/auth";
@@ -30,7 +30,7 @@ const ChatSession = ({ selectedTeam }: Props) => {
   const initialMessage = data?.data?.messages;
   const [messages, setMessages] = useState(initialMessage || []);
   const [newMessage, setNewMessage] = useState("");
-  // const [socket, setSocket] = useState<Socket | null>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -40,18 +40,18 @@ const ChatSession = ({ selectedTeam }: Props) => {
   }, [initialMessage]);
 
   useEffect(() => {
-    const socket = io(import.meta.env.VITE_API_BASE_URL, {
+    const newSocket = io(import.meta.env.VITE_API_BASE_URL, {
       transports: ["websocket", "polling"],
     });
-    // setSocket(newSocket);
-    socket.emit("joinRoom", teamId);
+    setSocket(newSocket);
+    newSocket.emit("joinRoom", teamId);
 
-    socket.on("receiveMessage", (message: IMessage) => {
+    newSocket.on("receiveMessage", (message: IMessage) => {
       console.log("New message received:", message);
-      setMessages((prev: IMessage[]) => [...prev, message]);
+      setMessages((prev) => [...prev, message]);
     });
     return () => {
-      socket.disconnect();
+      newSocket.disconnect();
     };
   }, [teamId]);
 
@@ -68,12 +68,12 @@ const ChatSession = ({ selectedTeam }: Props) => {
     //   userId: res?.data?.message?.sender,
     // };
 
-    // if (newMessage.trim() && socket) {
-    //   socket.emit("sendMessage", payload);
+     if (newMessage.trim() && socket) {
+    socket.emit("sendMessage", payload);
 
-    //   setNewMessage("");
-    // }
-    setNewMessage("");
+      setNewMessage("");
+    }
+    // setNewMessage("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
