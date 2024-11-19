@@ -7,7 +7,7 @@ import {
   useGetAllMessagesQuery,
   useSendMessageMutation,
 } from "@services/messages.service";
-import io, { Socket } from "socket.io-client";
+import io from "socket.io-client";
 import { useEffect, useRef, useState } from "react";
 import { IMessage } from "@services/interfaces/response/message";
 import { getDecodedJwt } from "helpers/auth";
@@ -30,8 +30,8 @@ const ChatSession = ({ selectedTeam }: Props) => {
   const initialMessage = data?.data?.messages;
   const [messages, setMessages] = useState(initialMessage || []);
   const [newMessage, setNewMessage] = useState("");
-  const [socket, setSocket] = useState<Socket | null>(null);
-  const messageContainerRef = useRef<HTMLDivElement | null>(null)
+  // const [socket, setSocket] = useState<Socket | null>(null);
+  const messageContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (initialMessage) {
@@ -40,17 +40,18 @@ const ChatSession = ({ selectedTeam }: Props) => {
   }, [initialMessage]);
 
   useEffect(() => {
-    const newSocket = io(import.meta.env.VITE_API_BASE_URL, {
-      transports: ["websocket"],
+    const socket = io(import.meta.env.VITE_API_BASE_URL, {
+      transports: ["websocket", "polling"],
     });
-    setSocket(newSocket);
-    newSocket.emit("joinRoom", teamId);
+    // setSocket(newSocket);
+    socket.emit("joinRoom", teamId);
 
-    newSocket.on("message", (message: IMessage) => {
+    socket.on("receiveMessage", (message: IMessage) => {
+      console.log("New message received:", message);
       setMessages((prev: IMessage[]) => [...prev, message]);
     });
     return () => {
-      newSocket.disconnect();
+      socket.disconnect();
     };
   }, [teamId]);
 
@@ -60,18 +61,19 @@ const ChatSession = ({ selectedTeam }: Props) => {
       content: newMessage,
       userId: user?.user?.id,
     };
-    const res = await sendMessage(payload).unwrap();
-    const savedMessage = {
-      content: res?.data?.message?.content,
-      teamId: res?.data?.message?.team,
-      userId: res?.data?.message?.sender,
-    };
+    await sendMessage(payload).unwrap();
+    // const savedMessage = {
+    //   content: res?.data?.message?.content,
+    //   teamId: res?.data?.message?.team,
+    //   userId: res?.data?.message?.sender,
+    // };
 
-    if (newMessage.trim() && socket) {
-      socket.emit("sendMessage", savedMessage);
+    // if (newMessage.trim() && socket) {
+    //   socket.emit("sendMessage", payload);
 
-      setNewMessage("");
-    }
+    //   setNewMessage("");
+    // }
+    setNewMessage("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -81,18 +83,19 @@ const ChatSession = ({ selectedTeam }: Props) => {
     }
   };
 
-const scrollToTop = () => {
-  if(messageContainerRef.current){
-    messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight
-  }
-  messageContainerRef.current?.lastElementChild?.scrollIntoView({
-    behavior: "smooth",
-  });
-}
+  const scrollToTop = () => {
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop =
+        messageContainerRef.current.scrollHeight;
+    }
+    messageContainerRef.current?.lastElementChild?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
 
-useEffect(() => {
-scrollToTop()
-}, [messages])
+  useEffect(() => {
+    scrollToTop();
+  }, [messages]);
 
   return (
     <>
