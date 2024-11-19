@@ -3,6 +3,8 @@ export type IUserDecoded = {
     email: string;
     name: string;
     role: string;
+    id: string;
+    team: string[]
   };
 };
 

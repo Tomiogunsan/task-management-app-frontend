@@ -1,9 +1,10 @@
 import { capitalize } from "lodash";
-import { ReactNode } from "react";
+
+import Badge from "shared/Badge";
 import { twMerge } from "tailwind-merge";
 
 export type IMessageCard = {
-  avatar: ReactNode;
+  avatar: string;
   name: string;
   role?: string;
   icon?: string;
@@ -24,9 +25,9 @@ const MessageCard = ({
   return (
     <div className="flex justify-between items-center cursor-pointer" onClick={onClick}>
       <div className="flex gap-2 items-center">
-        <div className="w-[45px] h-[45px] rounded-full bg-slate-200 uppercase text-center pt-2 text-lg font-semibold text-[#818187]">
-          {avatar}
-        </div>
+        
+         <Badge name={avatar}/> 
+       
         <div>
           <p className="text-[16px] leading-5 font-[600] text-[#ff8600] text-capitalize">
             {capitalize(name)}
@@ -37,7 +38,7 @@ const MessageCard = ({
               className
             )}
           >
-            {capitalize(role)}
+            {capitalize(role?.replace('-', ' '))}
           </p>
         </div>
       </div>

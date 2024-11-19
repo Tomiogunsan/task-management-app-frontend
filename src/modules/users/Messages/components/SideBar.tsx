@@ -1,25 +1,25 @@
-import { MessagePagePath } from "@constants/path";
+import { ITeams } from "@services/interfaces/response/team";
 import { useGetTeamQuery } from "@services/team.service";
 import { getDecodedJwt } from "helpers/auth";
-import { useNavigate } from "react-router-dom";
 
 import MessageCard from "shared/MessageCard";
 import Search from "shared/Search";
 
 type Props = {
-  onClick: (_id: string) => void;
+  onClick: (_data: ITeams) => void;
 };
 
 const SideBar = ({ onClick }: Props) => {
-  const { data, isLoading } = useGetTeamQuery(null);
-
   const user = getDecodedJwt();
+  const teamId = user.user.team[0];
+  const { data, isLoading } = useGetTeamQuery({ teamId });
+
   return (
-    <div className="grid gap-y-[26px]">
+    <div className="grid gap-y-[26px] fixed">
       <MessageCard
         name={user?.user?.name}
         role={user?.user?.role}
-        avatar={<p>{user?.user?.name?.charAt(0)}</p>}
+        avatar={user?.user?.name?.charAt(0)}
       />
       <Search placeholderText="Search for a team..." />
 
@@ -31,8 +31,8 @@ const SideBar = ({ onClick }: Props) => {
             key={item._id}
             name={item.name}
             role={item.description}
-            avatar={<p>{item.name?.charAt(0)}</p>}
-            onClick={() => onClick(item._id)}
+            avatar={item.name?.charAt(0)}
+            onClick={() => onClick(item)}
           />
         ))
       )}

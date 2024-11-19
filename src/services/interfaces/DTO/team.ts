@@ -12,3 +12,7 @@ export type IUpdateMemberTaskQuery = {
   projectId: string;
   taskId: string;
 };
+
+export type IGetTeamQuery = {
+  teamId?: string
+}

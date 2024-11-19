@@ -14,10 +14,15 @@ import {
   IGetMemberDetailsResponse,
   IGetMembersResponse,
   IGetTeamResponse,
-  
   IUpdateMemberTaskResponse,
 } from "./interfaces/response/team";
-import { IAddTeamQuery, IGetMemberDetailsQuery, IUpdateMemberTaskQuery } from "./interfaces/DTO/team";
+import {
+  IAddTeamQuery,
+  IGetMemberDetailsQuery,
+  IGetTeamQuery,
+  IUpdateMemberTaskQuery,
+} from "./interfaces/DTO/team";
+import { queryParamsHelper } from "config/query-params";
 
 export const teamApi = configuredApi
   .enhanceEndpoints({
@@ -26,10 +31,12 @@ export const teamApi = configuredApi
   .injectEndpoints({
     overrideExisting: true,
     endpoints: (build) => ({
-      getTeam: build.query<IGetTeamResponse, null>({
-        query: () => ({
+      getTeam: build.query<IGetTeamResponse, IGetTeamQuery>({
+        query: (data) => ({
           method: "GET",
-          url: GET_ALL_TEAM,
+          url: `${GET_ALL_TEAM}${queryParamsHelper({
+            teamId: data.teamId,
+          })}`,
           version: "v1",
         }),
         providesTags: ["allTeams"],
@@ -111,5 +118,5 @@ export const {
   useGetTeamMembersQuery,
   useAddMemberToTeamMutation,
   useGetMemberDetailQuery,
-  useUpdateMemberTaskMutation
+  useUpdateMemberTaskMutation,
 } = teamApi;

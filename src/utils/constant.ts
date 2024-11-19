@@ -42,3 +42,7 @@ export const getClass = (text: IStatusType) => {
       return `${defaultClassName} bg-[#cccdff] text-[#0800ff]`;
   }
 };
+
+export const formatTime = (createdAt: string) => {
+  return format(new Date(createdAt), "hh:mm a");
+};
