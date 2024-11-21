@@ -9,7 +9,7 @@ const useSocket = (teamId: string) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const user = getDecodedJwt();
 
-  const { data } = useGetAllMessagesQuery(teamId);
+  const { data } = useGetAllMessagesQuery(teamId, { skip: !teamId });
   const initialMessage = data?.data?.messages;
 
   const url = import.meta.env.VITE_API_URL;
@@ -34,7 +34,7 @@ const useSocket = (teamId: string) => {
     return () => {
       newSocket.disconnect(); // Clean up when the hook is unmounted
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

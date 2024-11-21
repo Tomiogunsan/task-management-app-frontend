@@ -8,28 +8,44 @@ import { GrUserAdmin } from "react-icons/gr";
 import { getDecodedJwt, logOut } from "helpers/auth";
 import { capitalize } from "lodash";
 import { FaMessage } from "react-icons/fa6";
+import { ADMIN, TEAM_MEMBER } from "@constants/roles";
+import { getAppAdminRole } from "helpers/userRole";
 
-const USER_SIDENAV = [
-  {
+const ALL_SIDENAV = {
+  team: {
     name: "Team",
     path: UsersPath.TEAM(),
     icon: <RiTeamFill />,
     iconWhite: <RiTeamFill />,
   },
-  {
+  project: {
     name: "Project",
     path: UsersPath.PROJECT(),
     icon: <LiaProjectDiagramSolid />,
     iconWhite: <LiaProjectDiagramSolid />,
   },
-  {
-    name: 'Messages',
+  message: {
+    name: "Messages",
     path: UsersPath.MESSAGES(),
-    icon: <FaMessage/>,
-    iconWhite: <FaMessage/>
-  }
+    icon: <FaMessage />,
+    iconWhite: <FaMessage />,
+  },
+};
+
+const ADMIN_SIDENAV = [
+  ALL_SIDENAV.team,
+  ALL_SIDENAV.project,
+  ALL_SIDENAV.message,
 ];
 
+const TEAM_MEMBER_SIDENAV = [
+  ALL_SIDENAV.message
+]
+
+const SIDENAVS = {
+  [ADMIN]: ADMIN_SIDENAV,
+  [TEAM_MEMBER]: TEAM_MEMBER_SIDENAV
+}
 const SideNav = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -40,8 +56,16 @@ const SideNav = () => {
     navigate(AuthPagePath.signin(), { replace: true });
   };
 
-  const user = getDecodedJwt()
-  
+  const user = getDecodedJwt();
+  const userRole = getAppAdminRole(user?.user?.role)
+
+  const NavLinks = (() => {
+    if(userRole && SIDENAVS[userRole]) {
+        return SIDENAVS[userRole]
+    }
+    handleLogout()
+    return []
+  })()
 
   return (
     <div className="overflow-auto bg-[#F7F7F8] flex flex-col border-r-2 border-[#F7F7F8] text-[#000] font-[Inter] h-screen ">
@@ -52,7 +76,7 @@ const SideNav = () => {
         </h1>
       </div>
       <div className="flex flex-col gap-2 pl-8 pr-4">
-        {USER_SIDENAV.map((sidenav) => (
+        {NavLinks.map((sidenav) => (
           <NavLink
             className={twMerge(
               "grid grid-flow-col items-center justify-start gap-3 px-[14px] text-[14px] font-[400] text-[#818187] h-[40px]",
@@ -118,7 +142,7 @@ const SideNav = () => {
             {capitalize(user?.user?.name)}
           </h3>
           <p className="text-[12px] leading-4 font-[400] text-[#818187]">
-            {capitalize(user?.user?.role.replace('-', ' '))}
+            {capitalize(user?.user?.role.replace("-", " "))}
           </p>
           <div
             className="bg-[#FF860029] rounded-[12px] flex gap-2 items-center justify-center p-4 w-full cursor-pointer"
