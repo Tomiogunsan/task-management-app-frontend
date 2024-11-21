@@ -3,18 +3,16 @@ import { FiHeart } from "react-icons/fi";
 import { FiBell } from "react-icons/fi";
 import { ITeams } from "@services/interfaces/response/team";
 import { capitalize } from "lodash";
-import {
-
-  useGetAllMessagesQuery,
-  useSendMessageMutation,
-} from "@services/messages.service";
-import io , {Socket} from "socket.io-client";
+import { useSendMessageMutation } from "@services/messages.service";
+// import io, { Socket } from "socket.io-client";
 import { useEffect, useRef, useState } from "react";
-import { IMessage } from "@services/interfaces/response/message";
+
 import { getDecodedJwt } from "helpers/auth";
 import Button from "shared/Button";
 import Badge from "shared/Badge";
 import { formatTime } from "@utils/constant";
+// import { initializeSocket } from "helpers/socket";
+import useSocket from "hooks/useSocket";
 
 type Props = {
   selectedTeam: ITeams;
@@ -26,35 +24,25 @@ const ChatSession = ({ selectedTeam }: Props) => {
 
   const currentUserId = user?.user?.id;
 
-   const { data } = useGetAllMessagesQuery(teamId);
-  const [sendMessage] = useSendMessageMutation();
- const initialMessage = data?.data?.messages;
-  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [sendMessage, { isSuccess, data }] = useSendMessageMutation();
+
   const [newMessage, setNewMessage] = useState("");
-  const [socket, setSocket] = useState<Socket | null>(null);
+
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
+  const {
+    sendMessage: socketSendMessage,
+    socket: customSocket,
+    messages: socketMessages,
+  } = useSocket(teamId);
 
   useEffect(() => {
-    if (initialMessage) {
-      setMessages(initialMessage);
+    if (isSuccess && customSocket && customSocket.connected) {
+      socketSendMessage(data?.data?.message);
+
+      setNewMessage("");
     }
-  }, [initialMessage]);
-
-  useEffect(() => {
-    const newSocket = io(import.meta.env.VITE_API_BASE_URL, {
-      transports: ["websocket", "polling"],
-    });
-    setSocket(newSocket);
-    newSocket.emit("joinRoom", teamId);
-
-    newSocket.on("receiveMessage", (message: IMessage) => {
-      console.log("New message received:", message);
-      setMessages((prev) => [...prev, message]);
-    });
-    return () => {
-      newSocket.disconnect();
-    };
-  }, [teamId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess, customSocket, socketSendMessage]);
 
   const sendMessageHandler = async () => {
     const payload = {
@@ -62,18 +50,8 @@ const ChatSession = ({ selectedTeam }: Props) => {
       content: newMessage,
       userId: user?.user?.id,
     };
-    await sendMessage(payload).unwrap();
-    // const savedMessage = {
-    //   content: res?.data?.message?.content,
-    //   teamId: res?.data?.message?.team,
-    //   userId: res?.data?.message?.sender,
-    // };
+    await sendMessage(payload);
 
-     if (newMessage.trim() && socket) {
-    socket.emit("sendMessage", payload);
-
-      setNewMessage("");
-    }
     // setNewMessage("");
   };
 
@@ -96,7 +74,7 @@ const ChatSession = ({ selectedTeam }: Props) => {
 
   useEffect(() => {
     scrollToTop();
-  }, [messages]);
+  }, [socketMessages]);
 
   return (
     <>
@@ -125,7 +103,7 @@ const ChatSession = ({ selectedTeam }: Props) => {
             className="flex-1 overflow-y-auto space-y-4 p-4 h-[400px]"
             ref={messageContainerRef}
           >
-            {messages.map((item) => (
+            {socketMessages.map((item) => (
               <div
                 key={item._id}
                 className={`flex  gap-2 ${

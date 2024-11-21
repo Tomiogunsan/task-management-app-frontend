@@ -1,6 +1,9 @@
 import { configuredApi } from "@constants/createApi-common";
 import { GET_ALL_MESSAGES, SEND_MESSAGES } from "config/apiUrl";
-import { IMessageResponse, ISendMessageResponse } from "./interfaces/response/message";
+import {
+  IMessageResponse,
+  ISendMessageResponse,
+} from "./interfaces/response/message";
 import { ISendMessageQuery } from "./interfaces/DTO/message";
 
 export const messageApi = configuredApi
@@ -15,8 +18,11 @@ export const messageApi = configuredApi
           method: "GET",
           url: GET_ALL_MESSAGES(teamId),
           version: "v1",
+          
         }),
         providesTags: ["allMessages"],
+
+        // transformResponse: (response) => (response as IMessageResponse).data,
       }),
       sendMessage: build.mutation<ISendMessageResponse, ISendMessageQuery>({
         query: (data) => ({
@@ -24,11 +30,12 @@ export const messageApi = configuredApi
           url: SEND_MESSAGES(data.teamId),
           version: "v1",
           data: {
+            
             content: data.content,
             userId: data.userId,
           },
         }),
-        invalidatesTags: ["allMessages"],
+        // invalidatesTags: ["allMessages"],
       }),
     }),
   });
