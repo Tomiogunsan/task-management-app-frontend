@@ -14,7 +14,7 @@ import AssignMemberToTask from "./components/AssignMemberToTask";
 import { TeamPagePath } from "@constants/path";
 
 const Members = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { teamId } = useParams();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [memberData, setMemberData] = useState<IMembers>();
@@ -62,8 +62,8 @@ const Members = () => {
         <Table<IMembers>
           tableHeads={tableHead}
           dataTableSource={data?.data?.members || []}
-          onRowClick={({_id: id}) => {
-            navigate(TeamPagePath.teamMemberDetails(teamId as string, id))
+          onRowClick={({ _id: id }) => {
+            navigate(TeamPagePath.teamMemberDetails(teamId as string, id));
           }}
           loading={isFetching}
           menuOptions={menu}

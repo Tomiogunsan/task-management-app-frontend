@@ -20,12 +20,15 @@ const MemberTaskComponent = ({
 }) => {
   const [updateTaskModal, setUpdateTaskModal] = useState(false);
   const [task, setTask] = useState<IMemberTask>();
+  const [projectId, setProjectId] = useState("");
 
   const { data, isFetching } = useGetMemberDetailQuery({
     teamId: teamId as string,
     memberId: memberId as string,
   });
 
+  console.log(data?.data?.member?.projects.toString());
+  const project = data?.data?.member?.projects.toString();
   const tableHead: ITableHead<IMemberTask>[] = [
     {
       label: "Name",
@@ -63,6 +66,7 @@ const MemberTaskComponent = ({
     {
       menuTitle: "Update status",
       action: (data: IMemberTask) => {
+        setProjectId(project as string);
         setUpdateTaskModal(true);
         setTask(data);
       },
@@ -87,6 +91,7 @@ const MemberTaskComponent = ({
         <UpdateMemberTask
           onClose={() => setUpdateTaskModal(false)}
           task={task as IMemberTask}
+          projectId={projectId}
         />
       )}
     </>

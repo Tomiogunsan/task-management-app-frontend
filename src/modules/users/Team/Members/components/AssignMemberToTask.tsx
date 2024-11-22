@@ -24,6 +24,7 @@ const AssignMemberToTask = ({ onClose, memberData }: Props) => {
     },
   });
   const projectId = memberData?.projects?.map((item) => item._id).toString();
+  console.log(projectId)
 
   const [assignTaskToMember, { isLoading }] = useAssignTaskMutation();
   const { data, isFetching } = useGetAllProjectTaskQuery({

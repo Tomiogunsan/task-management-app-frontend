@@ -140,7 +140,10 @@ const ChatSession = ({ selectedTeam }: Props) => {
                   </div>
                 </div>
                 {item.sender._id === currentUserId && (
-                  <Badge name={item?.sender?.name?.charAt(0)} />
+                  <Badge
+                    name={item?.sender?.name?.charAt(0)}
+                    className="w-[25px] h-[25px] mt-10 pt-0"
+                  />
                 )}
               </div>
             ))}

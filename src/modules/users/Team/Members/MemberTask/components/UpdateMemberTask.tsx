@@ -9,11 +9,12 @@ import Modal from "shared/Modal";
 type Props = {
   onClose: () => void;
   task: IMemberTask;
+  projectId: string 
 };
 
-const UpdateMemberTask = ({ onClose, task }: Props) => {
+const UpdateMemberTask = ({ onClose, task, projectId }: Props) => {
   const taskId = task?._id;
-  const projectId = task?.project.map((project) => project?._id).toString();
+  // const projectId = task?.project.map((project) => project?._id).toString();
   const [updateMemberTask] = useUpdateMemberTaskMutation();
 
   const handleUpdate = async () => {
