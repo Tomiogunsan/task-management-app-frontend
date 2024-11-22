@@ -2,7 +2,7 @@ import { capitalize, getClass } from "@utils/constant";
 
 import { twMerge } from "tailwind-merge";
 
-export type IStatusType = 'pending' | 'in-progress' | 'completed'
+export type IStatusType = "pending" | "in-progress" | "completed";
 
 const StatusBadge = ({
   status,
@@ -13,7 +13,7 @@ const StatusBadge = ({
 }) => {
   return (
     <div className={twMerge(getClass(status), "w-max", className)}>
-      {capitalize(status) === "Success" ? "Success" : capitalize(status)}
+      {capitalize(status.replace("-", " "))}
     </div>
   );
 };
