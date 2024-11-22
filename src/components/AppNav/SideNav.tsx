@@ -3,13 +3,14 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { LiaProjectDiagramSolid } from "react-icons/lia";
 import { RiTeamFill } from "react-icons/ri";
 import { twMerge } from "tailwind-merge";
-import { AuthPagePath, UsersPath } from "@constants/path";
+import { AuthPagePath,  UsersPath } from "@constants/path";
 import { GrUserAdmin } from "react-icons/gr";
 import { getDecodedJwt, logOut } from "helpers/auth";
 import { capitalize } from "lodash";
 import { FaMessage } from "react-icons/fa6";
 import { ADMIN, TEAM_MEMBER } from "@constants/roles";
 import { getAppAdminRole } from "helpers/userRole";
+import { MdAddTask } from "react-icons/md";
 
 const ALL_SIDENAV = {
   team: {
@@ -30,6 +31,12 @@ const ALL_SIDENAV = {
     icon: <FaMessage />,
     iconWhite: <FaMessage />,
   },
+  teamMemberTask: {
+    name: "Task",
+    path: UsersPath.TEAM_MEMBER_TASK(),
+    icon: <MdAddTask />,
+    iconWhite: <MdAddTask />,
+  },
 };
 
 const ADMIN_SIDENAV = [
@@ -39,13 +46,14 @@ const ADMIN_SIDENAV = [
 ];
 
 const TEAM_MEMBER_SIDENAV = [
+  ALL_SIDENAV.teamMemberTask,
   ALL_SIDENAV.message
-]
+];
 
 const SIDENAVS = {
   [ADMIN]: ADMIN_SIDENAV,
-  [TEAM_MEMBER]: TEAM_MEMBER_SIDENAV
-}
+  [TEAM_MEMBER]: TEAM_MEMBER_SIDENAV,
+};
 const SideNav = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -57,15 +65,15 @@ const SideNav = () => {
   };
 
   const user = getDecodedJwt();
-  const userRole = getAppAdminRole(user?.user?.role)
+  const userRole = getAppAdminRole(user?.user?.role);
 
   const NavLinks = (() => {
-    if(userRole && SIDENAVS[userRole]) {
-        return SIDENAVS[userRole]
+    if (userRole && SIDENAVS[userRole]) {
+      return SIDENAVS[userRole];
     }
-    handleLogout()
-    return []
-  })()
+    handleLogout();
+    return [];
+  })();
 
   return (
     <div className="overflow-auto bg-[#F7F7F8] flex flex-col border-r-2 border-[#F7F7F8] text-[#000] font-[Inter] h-screen ">
